@@ -12,7 +12,7 @@ interface RoomValue {
 }
 
 export const roomTypeToModel: RoomTypeToModel = {
-  planning: {
+  story: {
     values: [
       {
         label: '0',

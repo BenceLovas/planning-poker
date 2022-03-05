@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Button } from '@nextui-org/react'
+import { Button, Text } from '@nextui-org/react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { Row, Spacer } from '@nextui-org/react'
@@ -27,43 +27,46 @@ const Home: NextPage = () => {
       </div>
       <div
         style={{
-          height: '100%',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Row gap={1} justify="center" align="center">
+          <Text h2 b style={{ textAlign: 'center' }}>
+            Create room
+          </Text>
+          <Spacer x={2} />
+          <Row justify="center" align="center">
             <Button
-              size="lg"
+              size="xl"
               rounded
               shadow
-              onClick={() => router.push(`/room/type/planning/id/${uuid()}`)}
+              onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
             >
-              Create Planning Room
+              Story Estimation
             </Button>
           </Row>
-          <Spacer y={1} />
-          <Row gap={1} justify="center" align="center">
+          <Spacer x={1} />
+          <Row justify="center" align="center">
             <Button
-              size="lg"
+              size="xl"
               rounded
               shadow
               onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
             >
-              Create T-Shit Sizing Room
+              T-Shit Sizing
             </Button>
           </Row>
-          <Spacer y={1} />
-          <Row gap={1} justify="center" align="center">
+          <Spacer x={1} />
+          <Row justify="center" align="center">
             <Button
               size="lg"
               rounded
               shadow
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
             >
-              Create Confidence Room
+              Confidence Vote
             </Button>
           </Row>
         </div>
