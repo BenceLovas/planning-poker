@@ -10,9 +10,25 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <Button>Create Planning Room</Button>
-        <Button>Create Confidence Room</Button>
+      <main
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}
+      >
+        <Button size="lg" rounded>
+          Create Planning Room
+        </Button>
+        <Button size="lg" rounded>
+          Create T-Shit Sizing Room
+        </Button>
+        <Button size="lg" rounded>
+          Create Confidence Room
+        </Button>
       </main>
 
       <footer></footer>
