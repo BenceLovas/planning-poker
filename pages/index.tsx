@@ -61,7 +61,7 @@ const Home: NextPage = () => {
           <Spacer x={1} />
           <Row justify="center" align="center">
             <Button
-              size="lg"
+              size="xl"
               rounded
               shadow
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}

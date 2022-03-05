@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Modal, Text, Input, Button } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { roomTypeToModel } from './model/room-types'
+import socketIOClient, { Socket } from 'socket.io-client'
 
 export async function getServerSideProps() {
   return {
@@ -11,10 +12,35 @@ export async function getServerSideProps() {
   }
 }
 
+function useSocket(url: string, roomId: string) {
+  const [socket, setSocket] = useState<Socket>()
+
+  useEffect(() => {
+    const socketIo = socketIOClient(url, {
+      query: {
+        roomId,
+      },
+    })
+
+    setSocket(socketIo)
+
+    function cleanup() {
+      socketIo.disconnect()
+    }
+    return cleanup
+
+    // should only run once and not on every re-render,
+    // so pass an empty array
+  }, [])
+
+  return socket
+}
+
 const Room: NextPage = () => {
   const router = useRouter()
   const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
   const [displayName, setDisplayName] = useState('')
+  const socket = useSocket('http://localhost:3000', router.query.id as string)
 
   useEffect(() => {
     const displayNameFromLocalStorage = localStorage.getItem('displayName')
@@ -24,6 +50,14 @@ const Room: NextPage = () => {
       setDisplayName(displayNameFromLocalStorage)
     }
   }, [])
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('update', (payload) => {
+        console.log(payload)
+      })
+    }
+  }, [socket])
 
   const closeModal = () => {
     if (displayName !== null) {
