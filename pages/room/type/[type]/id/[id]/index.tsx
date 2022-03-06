@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { Modal, Text, Input, Button, useTheme } from '@nextui-org/react'
 import { useRouter } from 'next/router'
-import { roomTypeToModel } from './model/room-types'
+import { roomTypeToModel, CardValue } from './model/room-types'
 import socketIOClient, { Socket } from 'socket.io-client'
 import { v4 as uuid } from 'uuid'
 
@@ -17,6 +17,7 @@ interface User {
   name: string
   id: string
   hasPickedCard: boolean
+  pickedValue: CardValue | null
 }
 
 function useSocket(
@@ -89,6 +90,10 @@ const Room: NextPage = () => {
         setUsersInRoom(payload)
         console.log(payload)
       })
+      socket.on('card_reset', (payload) => {
+        setUsersInRoom(payload)
+        setSelectedValueId(null)
+      })
     }
   }, [socket])
 
@@ -103,12 +108,8 @@ const Room: NextPage = () => {
     const roomType: string = router.query.type as string
     const roomModel = roomTypeToModel[roomType]
 
-    const onClick = (
-      socket: Socket | undefined,
-      value: number | null,
-      id: string
-    ) => {
-      if (id !== selectedValueId) {
+    const onClick = (socket: Socket | undefined, value: CardValue) => {
+      if (value.id !== selectedValueId) {
         if (selectedValueId === null) {
           if (socket) {
             socket.emit('user_has_picked_card')
@@ -116,14 +117,10 @@ const Room: NextPage = () => {
         }
         if (socket) {
           socket.emit('value_update', {
-            user: {
-              name: userName,
-              id: userId,
-            },
             value,
           })
         }
-        setSelectedValueId(id)
+        setSelectedValueId(value.id)
       } else {
         if (socket) {
           socket.emit('user_has_not_picked_card')
@@ -136,7 +133,7 @@ const Room: NextPage = () => {
       return (
         <div
           key={value.id}
-          onClick={() => onClick(socket, value.value, value.id)}
+          onClick={() => onClick(socket, value)}
           style={{
             border: `4px solid ${theme?.colors.primary.value}`,
             background:
@@ -164,8 +161,10 @@ const Room: NextPage = () => {
         <title>Planning Poker - Room</title>
       </Head>
       <Text h1>{userName}</Text>
+      <Button onClick={() => socket?.emit('card-reveal')}>Reveal Cards</Button>
+      <Button onClick={() => socket?.emit('card-reset')}>Reset Cards</Button>
       <Text h3>Users</Text>
-      <div>
+      <div style={{ display: 'flex', gap: 10 }}>
         {usersInRoom.map((user) => {
           return (
             <div key={user.id}>
@@ -183,7 +182,9 @@ const Room: NextPage = () => {
                   justifyContent: 'center',
                   padding: '20px 10px',
                 }}
-              ></div>
+              >
+                {user.pickedValue && <Text h4>{user.pickedValue.label}</Text>}
+              </div>
               <Text h4>{user.name}</Text>
             </div>
           )

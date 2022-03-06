@@ -20,6 +20,7 @@ nextApp.prepare().then(async () => {
         name: socket.handshake.query.userName,
         id: socket.handshake.query.userId,
         hasPickedCard: false,
+        pickedValue: null,
       },
     }
     // join room
@@ -30,11 +31,39 @@ nextApp.prepare().then(async () => {
       .fetchSockets()
     io.in(socket.handshake.query.roomId as string).emit(
       'room_user_list_update',
-      socketsInRoom.map((socket) => socket.data.user)
+      socketsInRoom.map((socket) => ({
+        ...socket.data.user,
+        pickedValue: null,
+      }))
     )
 
     socket.on('value_update', (data) => {
-      socket.data.value = data.value
+      socket.data.user.pickedValue = data.value
+    })
+
+    socket.on('card-reveal', async () => {
+      const socketsInRoom = await io
+        .in(socket.handshake.query.roomId as string)
+        .fetchSockets()
+      io.in(socket.handshake.query.roomId as string).emit(
+        'room_user_list_update',
+        socketsInRoom.map((socket) => ({ ...socket.data.user }))
+      )
+    })
+
+    socket.on('card-reset', async () => {
+      const socketsInRoom = await io
+        .in(socket.handshake.query.roomId as string)
+        .fetchSockets()
+      socketsInRoom.forEach((socket) => {
+        socket.data.user.hasPickedCard = false
+        socket.data.user.pickedValue = null
+      })
+
+      io.in(socket.handshake.query.roomId as string).emit(
+        'card_reset',
+        socketsInRoom.map((socket) => ({ ...socket.data.user }))
+      )
     })
 
     socket.on('user_has_picked_card', async () => {
@@ -44,7 +73,10 @@ nextApp.prepare().then(async () => {
         .fetchSockets()
       io.in(socket.handshake.query.roomId as string).emit(
         'room_user_list_update',
-        socketsInRoom.map((socket) => socket.data.user)
+        socketsInRoom.map((socket) => ({
+          ...socket.data.user,
+          pickedValue: null,
+        }))
       )
     })
 
@@ -55,7 +87,10 @@ nextApp.prepare().then(async () => {
         .fetchSockets()
       io.in(socket.handshake.query.roomId as string).emit(
         'room_user_list_update',
-        socketsInRoom.map((socket) => socket.data.user)
+        socketsInRoom.map((socket) => ({
+          ...socket.data.user,
+          pickedValue: null,
+        }))
       )
     })
 
