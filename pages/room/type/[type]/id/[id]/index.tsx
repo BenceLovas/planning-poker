@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { Modal, Text, Input, Button, useTheme } from '@nextui-org/react'
 import { useRouter } from 'next/router'
-import { CardValue } from './model/room-types'
+import { CardValue } from './model/room-card'
 import socketIOClient, { Socket } from 'socket.io-client'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from './components/CardPicker'
@@ -150,6 +150,13 @@ const Room: NextPage = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       padding: '20px 10px',
+                      position: 'absolute',
+                      backfaceVisibility: 'hidden',
+                      transition: 'transform ease 500ms',
+                      zIndex: 2,
+                      transform: user.pickedValue
+                        ? 'rotateY(0deg)'
+                        : 'rotateY(180deg)',
                     }}
                   >
                     {user.pickedValue && (
@@ -158,6 +165,26 @@ const Room: NextPage = () => {
                       </Text>
                     )}
                   </div>
+                  <div
+                    style={{
+                      border: `4px solid ${theme?.colors.primary.value}`,
+                      background: user.hasPickedCard
+                        ? theme?.colors.primaryDark.value
+                        : 'transparent',
+                      borderRadius: 10,
+                      width: 60,
+                      height: 84,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '20px 10px',
+                      backfaceVisibility: 'hidden',
+                      transition: 'transform ease 500ms',
+                      transform: user.pickedValue
+                        ? 'rotateY(180deg)'
+                        : 'rotateY(0deg)',
+                    }}
+                  ></div>
                   <Text h4>{user.name}</Text>
                 </div>
               )

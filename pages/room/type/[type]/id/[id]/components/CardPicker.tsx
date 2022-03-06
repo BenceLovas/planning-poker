@@ -1,4 +1,4 @@
-import { roomTypeToModel, CardValue } from '../model/room-types'
+import { roomTypeToCardModel, CardValue } from '../model/room-card'
 import React, { FunctionComponent } from 'react'
 import { Socket } from 'socket.io-client'
 import { Text, useTheme } from '@nextui-org/react'
@@ -41,7 +41,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
 }) => {
   const { theme } = useTheme()
   const renderValueCards = () => {
-    const roomModel = roomTypeToModel[roomType]
+    const roomModel = roomTypeToCardModel[roomType]
 
     const onClick = (socket: Socket | undefined, value: CardValue) => {
       if (value.id !== selectedValueId) {
@@ -69,9 +69,9 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
         <Card
           key={value.id}
           as={motion.div}
-          animate={{ y: value.id === selectedValueId ? -16 : 0 }}
+          animate={{ y: value.id === selectedValueId ? -12 : 0 }}
           whileHover={{
-            y: -16,
+            y: -12,
             transition: { duration: 0.4, ease: 'easeOut' },
           }}
           onClick={() => onClick(socket, value)}
@@ -92,6 +92,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
             color={
               value.id === selectedValueId ? 'white' : theme?.colors.text.value
             }
+            style={{ userSelect: 'none' }}
           >
             {value.label}
           </Text>

@@ -12,7 +12,7 @@ export interface CardValue {
   id: string
 }
 
-export const roomTypeToModel: RoomTypeToCardModel = {
+export const roomTypeToCardModel: RoomTypeToCardModel = {
   story: {
     values: [
       {
@@ -75,37 +75,37 @@ export const roomTypeToModel: RoomTypeToCardModel = {
   't-shirt': {
     values: [
       {
-        label: 'xxs',
+        label: 'XXS',
         value: 1,
         id: '1',
       },
       {
-        label: 'xs',
+        label: 'XS',
         value: 2,
         id: '2',
       },
       {
-        label: 's',
+        label: 'S',
         value: 3,
         id: '3',
       },
       {
-        label: 'm',
+        label: 'M',
         value: 4,
         id: '4',
       },
       {
-        label: 'l',
+        label: 'L',
         value: 5,
         id: '5',
       },
       {
-        label: 'xl',
+        label: 'XL',
         value: 6,
         id: '6',
       },
       {
-        label: 'xxl',
+        label: 'XXL',
         value: 7,
         id: '7',
       },
