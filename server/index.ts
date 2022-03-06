@@ -15,9 +15,11 @@ nextApp.prepare().then(async () => {
   io.attach(server)
 
   io.on('connection', async (socket: socketio.Socket) => {
-    // @ts-ignore
-    socket.user = {
-      name: socket.handshake.query.userName,
+    socket.data = {
+      user: {
+        name: socket.handshake.query.userName,
+        id: socket.handshake.query.userId,
+      },
     }
     // join room
     socket.join(socket.handshake.query.roomId as string)
@@ -27,14 +29,14 @@ nextApp.prepare().then(async () => {
       .fetchSockets()
     io.in(socket.handshake.query.roomId as string).emit(
       'room_user_list_update',
-      // @ts-ignore
-      socketsInRoom.map((socket) => socket.user)
+      socketsInRoom.map((socket) => socket.data.user)
     )
 
     socket.on('value_update', (data) => {
       io.in(socket.handshake.query.roomId as string).emit('value_update', {
         user: {
-          displayName: data.user.displayName,
+          name: data.user.name,
+          id: data.user.id,
         },
         value: data.value,
       })
@@ -47,8 +49,7 @@ nextApp.prepare().then(async () => {
         .fetchSockets()
       io.in(socket.handshake.query.roomId as string).emit(
         'room_user_list_update',
-        // @ts-ignore
-        socketsInRoom.map((socket) => socket.user)
+        socketsInRoom.map((socket) => socket.data.user)
       )
     })
   })

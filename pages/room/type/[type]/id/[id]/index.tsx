@@ -5,6 +5,7 @@ import { Modal, Text, Input, Button } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { roomTypeToModel } from './model/room-types'
 import socketIOClient, { Socket } from 'socket.io-client'
+import { v4 as uuid } from 'uuid'
 
 export async function getServerSideProps() {
   return {
@@ -12,24 +13,35 @@ export async function getServerSideProps() {
   }
 }
 
-function useSocket(url: string, roomId: string, userName: string) {
+interface User {
+  name: string
+  id: string
+}
+
+function useSocket(
+  url: string,
+  roomId: string,
+  userName: string,
+  userId: string
+) {
   const [socket, setSocket] = useState<Socket>()
 
   useEffect(() => {
-    if (roomId && userName) {
+    if (roomId && userName && userId) {
       const socketIo = socketIOClient(url, {
         query: {
           roomId,
-          userName
+          userName,
+          userId,
         },
       })
       setSocket(socketIo)
-  
+
       return () => {
         socketIo.disconnect()
       }
     }
-  }, [userName])
+  }, [userName, userId, roomId, url])
 
   return socket
 }
@@ -37,16 +49,31 @@ function useSocket(url: string, roomId: string, userName: string) {
 const Room: NextPage = () => {
   const router = useRouter()
   const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
-  const [displayName, setDisplayName] = useState('')
-  const socket = useSocket('http://localhost:3000', router.query.id as string, displayName)
-  const [usersInRoom, setUsersInRoom] = useState([])
+  const [userName, setUserName] = useState('')
+  const [userId, setUserId] = useState('')
+  const socket = useSocket(
+    'http://localhost:3000',
+    router.query.id as string,
+    userName,
+    userId
+  )
+  const [usersInRoom, setUsersInRoom] = useState<User[]>([])
 
   useEffect(() => {
-    const displayNameFromLocalStorage = localStorage.getItem('displayName')
-    if (displayNameFromLocalStorage === null) {
+    const userNameFromLocalStorage = localStorage.getItem('userName')
+    if (userNameFromLocalStorage === null) {
       setOpenModalForNameInput(true)
     } else {
-      setDisplayName(displayNameFromLocalStorage)
+      setUserName(userNameFromLocalStorage)
+    }
+
+    const userIdFromLocalStorage = localStorage.getItem('userId')
+    if (userIdFromLocalStorage === null) {
+      const userId = uuid()
+      localStorage.setItem('userId', userId)
+      setUserId(userId)
+    } else {
+      setUserId(userIdFromLocalStorage)
     }
   }, [])
 
@@ -62,11 +89,9 @@ const Room: NextPage = () => {
     }
   }, [socket])
 
-
-
   const closeModal = () => {
-    if (displayName !== null) {
-      localStorage.setItem('displayName', displayName)
+    if (userName !== null) {
+      localStorage.setItem('userName', userName)
       setOpenModalForNameInput(false)
     }
   }
@@ -79,7 +104,8 @@ const Room: NextPage = () => {
       if (socket) {
         socket.emit('value_update', {
           user: {
-            displayName
+            name: userName,
+            id: userId,
           },
           value,
         })
@@ -88,7 +114,13 @@ const Room: NextPage = () => {
 
     return roomModel.values.map((value) => {
       return (
-        <Button key={value.label} bordered shadow auto onClick={() => sendValue(socket, value.value)}>
+        <Button
+          key={value.label}
+          bordered
+          shadow
+          auto
+          onClick={() => sendValue(socket, value.value)}
+        >
           <Text h3>{value.label}</Text>
         </Button>
       )
@@ -100,13 +132,14 @@ const Room: NextPage = () => {
       <Head>
         <title>Planning Poker - Room</title>
       </Head>
-      <Text h1>{displayName}</Text>
+      <Text h1>{userName}</Text>
       <Text h3>Users</Text>
       <div>
         {usersInRoom.map((user) => {
           return (
-            // @ts-ignore
-            <Text h4 key={user.name}>{user.name}</Text>
+            <Text h4 key={user.id}>
+              {user.name}
+            </Text>
           )
         })}
       </div>
@@ -133,7 +166,7 @@ const Room: NextPage = () => {
             size="lg"
             placeholder="Enter your display name"
             rounded
-            onChange={(e) => setDisplayName(e.target.value)}
+            onChange={(e) => setUserName(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -141,7 +174,7 @@ const Room: NextPage = () => {
             auto
             onClick={closeModal}
             rounded
-            disabled={!Boolean(displayName?.length)}
+            disabled={!Boolean(userName?.length)}
           >
             Continue to game
           </Button>
