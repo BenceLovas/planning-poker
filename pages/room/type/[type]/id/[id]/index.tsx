@@ -12,26 +12,24 @@ export async function getServerSideProps() {
   }
 }
 
-function useSocket(url: string, roomId: string) {
+function useSocket(url: string, roomId: string, userName: string) {
   const [socket, setSocket] = useState<Socket>()
 
   useEffect(() => {
-    const socketIo = socketIOClient(url, {
-      query: {
-        roomId,
-      },
-    })
-
-    setSocket(socketIo)
-
-    function cleanup() {
-      socketIo.disconnect()
+    if (roomId && userName) {
+      const socketIo = socketIOClient(url, {
+        query: {
+          roomId,
+          userName
+        },
+      })
+      setSocket(socketIo)
+  
+      return () => {
+        socketIo.disconnect()
+      }
     }
-    return cleanup
-
-    // should only run once and not on every re-render,
-    // so pass an empty array
-  }, [])
+  }, [userName])
 
   return socket
 }
@@ -40,7 +38,8 @@ const Room: NextPage = () => {
   const router = useRouter()
   const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
   const [displayName, setDisplayName] = useState('')
-  const socket = useSocket('http://localhost:3000', router.query.id as string)
+  const socket = useSocket('http://localhost:3000', router.query.id as string, displayName)
+  const [usersInRoom, setUsersInRoom] = useState([])
 
   useEffect(() => {
     const displayNameFromLocalStorage = localStorage.getItem('displayName')
@@ -53,11 +52,17 @@ const Room: NextPage = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('update', (payload) => {
+      socket.on('value_update', (payload) => {
+        console.log(payload)
+      })
+      socket.on('room_user_list_update', (payload) => {
+        setUsersInRoom(payload)
         console.log(payload)
       })
     }
   }, [socket])
+
+
 
   const closeModal = () => {
     if (displayName !== null) {
@@ -70,9 +75,20 @@ const Room: NextPage = () => {
     const roomType: string = router.query.type as string
     const roomModel = roomTypeToModel[roomType]
 
+    const sendValue = (socket: Socket | undefined, value: number | null) => {
+      if (socket) {
+        socket.emit('value_update', {
+          user: {
+            displayName
+          },
+          value,
+        })
+      }
+    }
+
     return roomModel.values.map((value) => {
       return (
-        <Button key={value.label} bordered shadow auto>
+        <Button key={value.label} bordered shadow auto onClick={() => sendValue(socket, value.value)}>
           <Text h3>{value.label}</Text>
         </Button>
       )
@@ -84,8 +100,18 @@ const Room: NextPage = () => {
       <Head>
         <title>Planning Poker - Room</title>
       </Head>
-      <h1>{displayName}</h1>
+      <Text h1>{displayName}</Text>
+      <Text h3>Users</Text>
+      <div>
+        {usersInRoom.map((user) => {
+          return (
+            // @ts-ignore
+            <Text h4 key={user.name}>{user.name}</Text>
+          )
+        })}
+      </div>
       <div style={{ display: 'flex' }}>{renderValueCards()}</div>
+
       <Modal
         aria-labelledby="modal-title"
         open={openModalForNameInput}

@@ -14,14 +14,42 @@ nextApp.prepare().then(async () => {
   const io: socketio.Server = new socketio.Server()
   io.attach(server)
 
-  io.on('connection', (socket: socketio.Socket) => {
+  io.on('connection', async (socket: socketio.Socket) => {
+    // @ts-ignore
+    socket.user = {
+      name: socket.handshake.query.userName,
+    }
+    // join room
     socket.join(socket.handshake.query.roomId as string)
-    socket
-      .to(socket.handshake.query.roomId as string)
-      .emit('update', 'new user joined the room')
+    // update others about the join
+    const socketsInRoom = await io
+      .in(socket.handshake.query.roomId as string)
+      .fetchSockets()
+    io.in(socket.handshake.query.roomId as string).emit(
+      'room_user_list_update',
+      // @ts-ignore
+      socketsInRoom.map((socket) => socket.user)
+    )
 
-    socket.on('disconnect', () => {
+    socket.on('value_update', (data) => {
+      io.in(socket.handshake.query.roomId as string).emit('value_update', {
+        user: {
+          displayName: data.user.displayName,
+        },
+        value: data.value,
+      })
+    })
+
+    socket.on('disconnect', async () => {
       console.log('client disconnected')
+      const socketsInRoom = await io
+        .in(socket.handshake.query.roomId as string)
+        .fetchSockets()
+      io.in(socket.handshake.query.roomId as string).emit(
+        'room_user_list_update',
+        // @ts-ignore
+        socketsInRoom.map((socket) => socket.user)
+      )
     })
   })
 
