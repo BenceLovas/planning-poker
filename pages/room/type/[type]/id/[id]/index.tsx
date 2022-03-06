@@ -1,54 +1,21 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Modal, Text, Input, Button, useTheme, Avatar } from '@nextui-org/react'
+import { Text, Button, useTheme, Avatar } from '@nextui-org/react'
 import { useRouter } from 'next/router'
-import { CardValue } from './model/room-card'
-import socketIOClient, { Socket } from 'socket.io-client'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from './components/CardPicker'
 import { ThemeSwitcher } from '../../../../../components/ThemeSwitcher'
 import { IoPerson } from 'react-icons/io5'
+import { NameInputModal } from './components/NameInputModal'
+import { useSocket } from '../../../../../hooks/useSocket'
+import { User } from './model/user'
 
+// this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
   return {
     props: {},
   }
-}
-
-interface User {
-  name: string
-  id: string
-  hasPickedCard: boolean
-  pickedValue: CardValue | null
-}
-
-function useSocket(
-  url: string,
-  roomId: string,
-  userName: string,
-  userId: string
-) {
-  const [socket, setSocket] = useState<Socket>()
-
-  useEffect(() => {
-    if (roomId && userName && userId) {
-      const socketIo = socketIOClient(url, {
-        query: {
-          roomId,
-          userName,
-          userId,
-        },
-      })
-      setSocket(socketIo)
-
-      return () => {
-        socketIo.disconnect()
-      }
-    }
-  }, [userName, userId, roomId, url])
-
-  return socket
 }
 
 const Room: NextPage = () => {
@@ -233,42 +200,12 @@ const Room: NextPage = () => {
           />
         </div>
       </div>
-
-      <Modal
-        aria-labelledby="modal-title"
-        open={openModalForNameInput}
-        onClose={closeModal}
-        blur
-        preventClose
-      >
-        <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Choose your display name
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Enter your display name"
-            rounded
-            onChange={(e) => setUserNameInput(e.target.value)}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            auto
-            onClick={closeModal}
-            rounded
-            disabled={!Boolean(userNameInput?.length)}
-          >
-            Continue to game
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <NameInputModal
+        closeModal={closeModal}
+        openModalForNameInput={openModalForNameInput}
+        userNameInput={userNameInput}
+        setUserNameInput={setUserNameInput}
+      />
     </>
   )
 }
