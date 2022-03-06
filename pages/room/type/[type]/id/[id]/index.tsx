@@ -3,9 +3,10 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { Modal, Text, Input, Button, useTheme } from '@nextui-org/react'
 import { useRouter } from 'next/router'
-import { roomTypeToModel, CardValue } from './model/room-types'
+import { CardValue } from './model/room-types'
 import socketIOClient, { Socket } from 'socket.io-client'
 import { v4 as uuid } from 'uuid'
+import { CardPicker } from './components/CardPicker'
 
 export async function getServerSideProps() {
   return {
@@ -104,64 +105,6 @@ const Room: NextPage = () => {
     }
   }
 
-  const renderValueCards = () => {
-    const roomType: string = router.query.type as string
-    const roomModel = roomTypeToModel[roomType]
-
-    const onClick = (socket: Socket | undefined, value: CardValue) => {
-      if (value.id !== selectedValueId) {
-        if (selectedValueId === null) {
-          if (socket) {
-            socket.emit('user_has_picked_card')
-          }
-        }
-        if (socket) {
-          socket.emit('value_update', {
-            value,
-          })
-        }
-        setSelectedValueId(value.id)
-      } else {
-        if (socket) {
-          socket.emit('user_has_not_picked_card')
-        }
-        setSelectedValueId(null)
-      }
-    }
-
-    return roomModel.values.map((value) => {
-      return (
-        <div
-          key={value.id}
-          onClick={() => onClick(socket, value)}
-          style={{
-            border: `4px solid ${theme?.colors.primary.value}`,
-            background:
-              value.id === selectedValueId
-                ? theme?.colors.primary.value
-                : 'transparent',
-            cursor: 'pointer',
-            borderRadius: 10,
-            width: 60,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px 10px',
-          }}
-        >
-          <Text
-            h3
-            color={
-              value.id === selectedValueId ? 'white' : theme?.colors.text.value
-            }
-          >
-            {value.label}
-          </Text>
-        </div>
-      )
-    })
-  }
-
   return (
     <>
       <Head>
@@ -231,9 +174,12 @@ const Room: NextPage = () => {
             padding: 20,
           }}
         >
-          <div style={{ overflowX: 'scroll', paddingBottom: 16 }}>
-            <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
-          </div>
+          <CardPicker
+            roomType={router.query.type as string}
+            socket={socket}
+            selectedValueId={selectedValueId}
+            setSelectedValueId={setSelectedValueId}
+          />
         </div>
       </div>
 
