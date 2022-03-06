@@ -149,7 +149,14 @@ const Room: NextPage = () => {
             padding: '20px 10px',
           }}
         >
-          <Text h3>{value.label}</Text>
+          <Text
+            h3
+            color={
+              value.id === selectedValueId ? 'white' : theme?.colors.text.value
+            }
+          >
+            {value.label}
+          </Text>
         </div>
       )
     })
@@ -160,37 +167,75 @@ const Room: NextPage = () => {
       <Head>
         <title>Planning Poker - Room</title>
       </Head>
-      <Text h1>{userName}</Text>
-      <Button onClick={() => socket?.emit('card-reveal')}>Reveal Cards</Button>
-      <Button onClick={() => socket?.emit('card-reset')}>Reset Cards</Button>
-      <Text h3>Users</Text>
-      <div style={{ display: 'flex', gap: 10 }}>
-        {usersInRoom.map((user) => {
-          return (
-            <div key={user.id}>
-              <div
-                style={{
-                  border: `4px solid ${theme?.colors.primary.value}`,
-                  background: user.hasPickedCard
-                    ? theme?.colors.primary.value
-                    : 'transparent',
-                  borderRadius: 10,
-                  width: 60,
-                  height: 84,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '20px 10px',
-                }}
-              >
-                {user.pickedValue && <Text h4>{user.pickedValue.label}</Text>}
-              </div>
-              <Text h4>{user.name}</Text>
-            </div>
-          )
-        })}
+      <div
+        style={{
+          height: '100%',
+          display: 'grid',
+          gridTemplateRows: '200px 1fr 200px',
+          gridTemplateAreas: `
+          'header'
+          'users'
+          'cards'
+        `,
+        }}
+      >
+        <div style={{ gridArea: 'header' }}>
+          <Text h1>{userName}</Text>
+          <Button onClick={() => socket?.emit('card-reveal')}>
+            Reveal Cards
+          </Button>
+          <Button onClick={() => socket?.emit('card-reset')}>
+            Reset Cards
+          </Button>
+        </div>
+        <div style={{ gridArea: 'users' }}>
+          <Text h3>Users</Text>
+          <div style={{ display: 'flex', gap: 10 }}>
+            {usersInRoom.map((user) => {
+              return (
+                <div key={user.id}>
+                  <div
+                    style={{
+                      border: `4px solid ${theme?.colors.primary.value}`,
+                      background: user.hasPickedCard
+                        ? theme?.colors.primary.value
+                        : 'transparent',
+                      borderRadius: 10,
+                      width: 60,
+                      height: 84,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '20px 10px',
+                    }}
+                  >
+                    {user.pickedValue && (
+                      <Text h3 color="white">
+                        {user.pickedValue.label}
+                      </Text>
+                    )}
+                  </div>
+                  <Text h4>{user.name}</Text>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div
+          style={{
+            overflowX: 'scroll',
+            gridArea: 'cards',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            padding: 20,
+          }}
+        >
+          <div style={{ overflowX: 'scroll', paddingBottom: 16 }}>
+            <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
+          </div>
+        </div>
       </div>
-      <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
 
       <Modal
         aria-labelledby="modal-title"
