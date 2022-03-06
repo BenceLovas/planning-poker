@@ -19,6 +19,7 @@ nextApp.prepare().then(async () => {
       user: {
         name: socket.handshake.query.userName,
         id: socket.handshake.query.userId,
+        hasPickedCard: false,
       },
     }
     // join room
@@ -33,13 +34,29 @@ nextApp.prepare().then(async () => {
     )
 
     socket.on('value_update', (data) => {
-      io.in(socket.handshake.query.roomId as string).emit('value_update', {
-        user: {
-          name: data.user.name,
-          id: data.user.id,
-        },
-        value: data.value,
-      })
+      socket.data.value = data.value
+    })
+
+    socket.on('user_has_picked_card', async () => {
+      socket.data.user.hasPickedCard = true
+      const socketsInRoom = await io
+        .in(socket.handshake.query.roomId as string)
+        .fetchSockets()
+      io.in(socket.handshake.query.roomId as string).emit(
+        'room_user_list_update',
+        socketsInRoom.map((socket) => socket.data.user)
+      )
+    })
+
+    socket.on('user_has_not_picked_card', async () => {
+      socket.data.user.hasPickedCard = false
+      const socketsInRoom = await io
+        .in(socket.handshake.query.roomId as string)
+        .fetchSockets()
+      io.in(socket.handshake.query.roomId as string).emit(
+        'room_user_list_update',
+        socketsInRoom.map((socket) => socket.data.user)
+      )
     })
 
     socket.on('disconnect', async () => {

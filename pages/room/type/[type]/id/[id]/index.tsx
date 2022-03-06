@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Modal, Text, Input, Button } from '@nextui-org/react'
+import { Modal, Text, Input, Button, useTheme } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { roomTypeToModel } from './model/room-types'
 import socketIOClient, { Socket } from 'socket.io-client'
@@ -16,6 +16,7 @@ export async function getServerSideProps() {
 interface User {
   name: string
   id: string
+  hasPickedCard: boolean
 }
 
 function useSocket(
@@ -58,6 +59,8 @@ const Room: NextPage = () => {
     userId
   )
   const [usersInRoom, setUsersInRoom] = useState<User[]>([])
+  const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
+  const { theme } = useTheme()
 
   useEffect(() => {
     const userNameFromLocalStorage = localStorage.getItem('userName')
@@ -100,29 +103,57 @@ const Room: NextPage = () => {
     const roomType: string = router.query.type as string
     const roomModel = roomTypeToModel[roomType]
 
-    const sendValue = (socket: Socket | undefined, value: number | null) => {
-      if (socket) {
-        socket.emit('value_update', {
-          user: {
-            name: userName,
-            id: userId,
-          },
-          value,
-        })
+    const onClick = (
+      socket: Socket | undefined,
+      value: number | null,
+      id: string
+    ) => {
+      if (id !== selectedValueId) {
+        if (selectedValueId === null) {
+          if (socket) {
+            socket.emit('user_has_picked_card')
+          }
+        }
+        if (socket) {
+          socket.emit('value_update', {
+            user: {
+              name: userName,
+              id: userId,
+            },
+            value,
+          })
+        }
+        setSelectedValueId(id)
+      } else {
+        if (socket) {
+          socket.emit('user_has_not_picked_card')
+        }
+        setSelectedValueId(null)
       }
     }
 
     return roomModel.values.map((value) => {
       return (
-        <Button
-          key={value.label}
-          bordered
-          shadow
-          auto
-          onClick={() => sendValue(socket, value.value)}
+        <div
+          key={value.id}
+          onClick={() => onClick(socket, value.value, value.id)}
+          style={{
+            border: `4px solid ${theme?.colors.primary.value}`,
+            background:
+              value.id === selectedValueId
+                ? theme?.colors.primary.value
+                : 'transparent',
+            cursor: 'pointer',
+            borderRadius: 10,
+            width: 60,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px 10px',
+          }}
         >
           <Text h3>{value.label}</Text>
-        </Button>
+        </div>
       )
     })
   }
@@ -137,13 +168,28 @@ const Room: NextPage = () => {
       <div>
         {usersInRoom.map((user) => {
           return (
-            <Text h4 key={user.id}>
-              {user.name}
-            </Text>
+            <div key={user.id}>
+              <div
+                style={{
+                  border: `4px solid ${theme?.colors.primary.value}`,
+                  background: user.hasPickedCard
+                    ? theme?.colors.primary.value
+                    : 'transparent',
+                  borderRadius: 10,
+                  width: 60,
+                  height: 84,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '20px 10px',
+                }}
+              ></div>
+              <Text h4>{user.name}</Text>
+            </div>
           )
         })}
       </div>
-      <div style={{ display: 'flex' }}>{renderValueCards()}</div>
+      <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
 
       <Modal
         aria-labelledby="modal-title"
