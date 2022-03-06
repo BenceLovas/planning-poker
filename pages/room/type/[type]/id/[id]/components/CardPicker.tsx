@@ -1,7 +1,7 @@
 import { roomTypeToCardModel, CardValue } from '../model/room-card'
 import React, { FunctionComponent } from 'react'
 import { Socket } from 'socket.io-client'
-import { Text, useTheme } from '@nextui-org/react'
+import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
@@ -13,15 +13,19 @@ type CardPickerProps = {
 }
 
 type CardProps = {
-  borderColor: string | undefined
-  backgroundColor: string | undefined
-  hoverBackgroundColor: string | undefined
-  shadow: string | undefined
+  theme: Theme
+  selected: boolean
 }
 
 const Card = styled.div<CardProps>`
-  border: ${(props) => `3px solid ${props.borderColor}`};
-  background: ${(props) => props.backgroundColor};
+  border: ${(props) =>
+    `3px solid ${
+      props.selected
+        ? props.theme.colors.primaryDark.value
+        : props.theme.colors.accents2.value
+    }`};
+  background: ${(props) =>
+    props.selected ? props.theme.colors.primary.value : 'transparent'};
   cursor: pointer;
   border-radius: 10px;
   width: 60px;
@@ -29,9 +33,14 @@ const Card = styled.div<CardProps>`
   align-items: center;
   justify-content: center;
   padding: 20px 10px;
-  box-shadow: ${(props) => props.shadow};
+  box-shadow: ${(props) =>
+    props.selected
+      ? props.theme.shadows.md.value
+      : props.theme.shadows.sm.value};
   &:hover {
-    background: ${(props) => props.hoverBackgroundColor};
+    background: ${(props) =>
+      props.selected ? props.theme.colors.primary.value : 'trasparent'};
+    box-shadow: ${(props) => props.theme.shadows.md.value};
   }
 `
 
@@ -80,22 +89,8 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
             transition: { duration: 0.4, ease: 'easeOut' },
           }}
           onClick={() => onClick(socket, value)}
-          borderColor={
-            value.id === selectedValueId
-              ? theme?.colors.primaryDark.value
-              : theme?.colors.accents2.value
-          }
-          backgroundColor={
-            value.id === selectedValueId
-              ? theme?.colors.primary.value
-              : 'transparent'
-          }
-          hoverBackgroundColor={
-            value.id === selectedValueId
-              ? theme?.colors.primary.value
-              : theme?.colors.accents2.value
-          }
-          shadow={theme?.shadows.sm.value}
+          theme={theme}
+          selected={value.id === selectedValueId}
         >
           <Text
             h3
@@ -112,7 +107,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
   }
 
   return (
-    <div style={{ overflowX: 'scroll', padding: '24px 20px 16px 20px' }}>
+    <div style={{ overflowX: 'scroll', padding: '44px 40px 36px 40px' }}>
       <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
     </div>
   )

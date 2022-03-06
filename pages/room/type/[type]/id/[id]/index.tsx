@@ -89,6 +89,7 @@ const Room: NextPage = () => {
       </Head>
       <div
         style={{
+          background: theme?.colors.background.value,
           height: '100%',
           display: 'grid',
           gridTemplateRows: '200px 1fr 200px',
@@ -189,7 +190,6 @@ const Room: NextPage = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'flex-end',
-            padding: 20,
           }}
         >
           <CardPicker
