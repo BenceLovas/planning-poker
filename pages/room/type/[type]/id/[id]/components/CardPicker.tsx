@@ -16,10 +16,11 @@ type CardProps = {
   borderColor: string | undefined
   backgroundColor: string | undefined
   hoverBackgroundColor: string | undefined
+  shadow: string | undefined
 }
 
 const Card = styled.div<CardProps>`
-  border: ${(props) => `4px solid ${props.borderColor}`};
+  border: ${(props) => `3px solid ${props.borderColor}`};
   background: ${(props) => props.backgroundColor};
   cursor: pointer;
   border-radius: 10px;
@@ -28,6 +29,7 @@ const Card = styled.div<CardProps>`
   align-items: center;
   justify-content: center;
   padding: 20px 10px;
+  box-shadow: ${(props) => props.shadow};
   &:hover {
     background: ${(props) => props.hoverBackgroundColor};
   }
@@ -59,6 +61,9 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
       } else {
         if (socket) {
           socket.emit('user_has_not_picked_card')
+          socket.emit('value_update', {
+            value: null,
+          })
         }
         setSelectedValueId(null)
       }
@@ -69,13 +74,17 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
         <Card
           key={value.id}
           as={motion.div}
-          animate={{ y: value.id === selectedValueId ? -12 : 0 }}
+          animate={{ y: value.id === selectedValueId ? -8 : 0 }}
           whileHover={{
-            y: -12,
+            y: -8,
             transition: { duration: 0.4, ease: 'easeOut' },
           }}
           onClick={() => onClick(socket, value)}
-          borderColor={theme?.colors.primary.value}
+          borderColor={
+            value.id === selectedValueId
+              ? theme?.colors.primaryDark.value
+              : theme?.colors.accents2.value
+          }
           backgroundColor={
             value.id === selectedValueId
               ? theme?.colors.primary.value
@@ -84,8 +93,9 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
           hoverBackgroundColor={
             value.id === selectedValueId
               ? theme?.colors.primary.value
-              : theme?.colors.primaryLight.value
+              : theme?.colors.accents2.value
           }
+          shadow={theme?.shadows.sm.value}
         >
           <Text
             h3
@@ -102,7 +112,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
   }
 
   return (
-    <div style={{ overflowX: 'scroll', paddingBottom: 16, paddingTop: 24 }}>
+    <div style={{ overflowX: 'scroll', padding: '24px 20px 16px 20px' }}>
       <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
     </div>
   )

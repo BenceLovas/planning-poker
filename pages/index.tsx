@@ -4,13 +4,10 @@ import { Button, Text } from '@nextui-org/react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { Row, Spacer } from '@nextui-org/react'
-import { useTheme as useNextTheme } from 'next-themes'
-import { Switch, useTheme } from '@nextui-org/react'
+import { ThemeSwitcher } from './components/ThemeSwitcher'
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const { setTheme } = useNextTheme()
-  const { isDark, type } = useTheme()
 
   return (
     <>
@@ -18,13 +15,7 @@ const Home: NextPage = () => {
         <title>Planning Poker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        The current theme is: {type}
-        <Switch
-          checked={isDark}
-          onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
-        />
-      </div>
+      <ThemeSwitcher />
       <div
         style={{
           display: 'flex',

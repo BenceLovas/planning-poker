@@ -1,12 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Modal, Text, Input, Button, useTheme } from '@nextui-org/react'
+import { Modal, Text, Input, Button, useTheme, Avatar } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { CardValue } from './model/room-card'
 import socketIOClient, { Socket } from 'socket.io-client'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from './components/CardPicker'
+import { ThemeSwitcher } from '../../../../../components/ThemeSwitcher'
+import { IoPerson } from 'react-icons/io5'
 
 export async function getServerSideProps() {
   return {
@@ -53,6 +55,7 @@ const Room: NextPage = () => {
   const router = useRouter()
   const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
   const [userName, setUserName] = useState('')
+  const [userNameInput, setUserNameInput] = useState('')
   const [userId, setUserId] = useState('')
   const socket = useSocket(
     'http://localhost:3000',
@@ -98,9 +101,16 @@ const Room: NextPage = () => {
     }
   }, [socket])
 
+  useEffect(() => {
+    if (userName) {
+      setUserNameInput('')
+    }
+  }, [userName])
+
   const closeModal = () => {
-    if (userName !== null) {
-      localStorage.setItem('userName', userName)
+    if (userNameInput !== null) {
+      localStorage.setItem('userName', userNameInput)
+      setUserName(userNameInput)
       setOpenModalForNameInput(false)
     }
   }
@@ -122,16 +132,30 @@ const Room: NextPage = () => {
         `,
         }}
       >
-        <div style={{ gridArea: 'header' }}>
-          <Text h1>{userName}</Text>
+        <div
+          style={{
+            gridArea: 'header',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            padding: 20,
+          }}
+        >
+          <ThemeSwitcher />
+          <div style={{ display: 'flex', gap: 16 }}>
+            <Text h3>{userName}</Text>
+            <Avatar
+              icon={<IoPerson size={20} color={theme?.colors.primary.value} />}
+            />
+          </div>
+        </div>
+        <div style={{ gridArea: 'users' }}>
           <Button onClick={() => socket?.emit('card-reveal')}>
             Reveal Cards
           </Button>
           <Button onClick={() => socket?.emit('card-reset')}>
             Reset Cards
           </Button>
-        </div>
-        <div style={{ gridArea: 'users' }}>
           <Text h3>Users</Text>
           <div style={{ display: 'flex', gap: 10 }}>
             {usersInRoom.map((user) => {
@@ -139,7 +163,7 @@ const Room: NextPage = () => {
                 <div key={user.id}>
                   <div
                     style={{
-                      border: `4px solid ${theme?.colors.primary.value}`,
+                      border: `3px solid ${theme?.colors.accents2.value}`,
                       background: user.hasPickedCard
                         ? theme?.colors.primary.value
                         : 'transparent',
@@ -167,7 +191,7 @@ const Room: NextPage = () => {
                   </div>
                   <div
                     style={{
-                      border: `4px solid ${theme?.colors.primary.value}`,
+                      border: `3px solid ${theme?.colors.accents2.value}`,
                       background: user.hasPickedCard
                         ? theme?.colors.primaryDark.value
                         : 'transparent',
@@ -231,7 +255,7 @@ const Room: NextPage = () => {
             size="lg"
             placeholder="Enter your display name"
             rounded
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={(e) => setUserNameInput(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -239,7 +263,7 @@ const Room: NextPage = () => {
             auto
             onClick={closeModal}
             rounded
-            disabled={!Boolean(userName?.length)}
+            disabled={!Boolean(userNameInput?.length)}
           >
             Continue to game
           </Button>
