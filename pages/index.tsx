@@ -32,7 +32,7 @@ const Home: NextPage = () => {
             <Button
               size="xl"
               rounded
-              shadow
+              ghost
               onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
             >
               Story Estimation
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
             <Button
               size="xl"
               rounded
-              shadow
+              ghost
               onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
             >
               T-Shit Sizing
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             <Button
               size="xl"
               rounded
-              shadow
+              ghost
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
             >
               Confidence Vote

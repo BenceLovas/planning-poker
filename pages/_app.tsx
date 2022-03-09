@@ -25,7 +25,6 @@ const darkTheme = createTheme({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    // 2. Use at the root of your app
     <NextThemesProvider
       defaultTheme="system"
       attribute="class"

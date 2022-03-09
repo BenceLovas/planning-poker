@@ -19,7 +19,6 @@ export const NameInputModal: FunctionComponent<NameInputModalProps> = ({
       aria-labelledby="modal-title"
       open={openModalForNameInput}
       onClose={closeModal}
-      blur
       preventClose
     >
       <Modal.Header>
