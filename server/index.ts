@@ -41,14 +41,19 @@ nextApp.prepare().then(async () => {
       socket.data.user.pickedValue = data.value
     })
 
-    socket.on('card-reveal', async () => {
-      const socketsInRoom = await io
-        .in(socket.handshake.query.roomId as string)
-        .fetchSockets()
+    socket.on('initiate-reveal-countdown', async () => {
       io.in(socket.handshake.query.roomId as string).emit(
-        'room_user_list_update',
-        socketsInRoom.map((socket) => ({ ...socket.data.user }))
+        'initiate-reveal-countdown'
       )
+      setTimeout(async () => {
+        const socketsInRoom = await io
+          .in(socket.handshake.query.roomId as string)
+          .fetchSockets()
+        io.in(socket.handshake.query.roomId as string).emit(
+          'card-reveal',
+          socketsInRoom.map((socket) => ({ ...socket.data.user }))
+        )
+      }, 2000)
     })
 
     socket.on('card-reset', async () => {
