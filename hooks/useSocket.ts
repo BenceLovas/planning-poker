@@ -11,13 +11,16 @@ export function useSocket(
 
   useEffect(() => {
     if (roomId && userName && userId) {
-      const socketIo = socketIOClient(url, {
-        query: {
-          roomId,
-          userName,
-          userId,
-        },
-      })
+      const socketIo = socketIOClient(
+        'https://planning-poker-ws-server.herokuapp.com',
+        {
+          query: {
+            roomId,
+            userName,
+            userId,
+          },
+        }
+      )
       setSocket(socketIo)
 
       return () => {
