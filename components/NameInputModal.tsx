@@ -21,33 +21,35 @@ const NameInputModal: FunctionComponent<NameInputModalProps> = ({
       onClose={closeModal}
       preventClose
     >
-      <Modal.Header>
-        <Text id="modal-title" size={18}>
-          Choose your display name
-        </Text>
-      </Modal.Header>
-      <Modal.Body>
-        <Input
-          clearable
-          bordered
-          fullWidth
-          color="primary"
-          size="lg"
-          placeholder="Enter your display name"
-          rounded
-          onChange={(e) => setUserNameInput(e.target.value)}
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          auto
-          onClick={closeModal}
-          rounded
-          disabled={!Boolean(userNameInput?.length)}
-        >
-          Continue to game
-        </Button>
-      </Modal.Footer>
+      <form>
+        <Modal.Header>
+          <Text id="modal-title" size={18}>
+            Choose your display name
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Input
+            clearable
+            bordered
+            fullWidth
+            color="primary"
+            size="lg"
+            placeholder="Enter your display name"
+            rounded
+            onChange={(e) => setUserNameInput(e.target.value)}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            auto
+            onClick={closeModal}
+            rounded
+            disabled={!Boolean(userNameInput?.length)}
+          >
+            Continue to game
+          </Button>
+        </Modal.Footer>
+      </form>
     </Modal>
   )
 }

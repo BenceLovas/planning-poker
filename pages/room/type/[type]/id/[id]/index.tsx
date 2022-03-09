@@ -26,11 +26,12 @@ const Room: NextPage = () => {
   const [userNameInput, setUserNameInput] = useState('')
   const [userId, setUserId] = useState('')
   const socket = useSocket(
-    location.origin.replace(/^http/, 'ws'),
+    router.basePath.replace(/^http/, 'ws'),
     router.query.id as string,
     userName,
     userId
   )
+
   const [usersInRoom, setUsersInRoom] = useState<User[]>([])
   const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
   const { theme } = useTheme()
