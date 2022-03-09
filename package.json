@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' server/index.ts",
-    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:server": "tsc --project tsconfig.server.json",
+    "build:next": "next build",
+    "build": "yarn run build:next && yarn run build:server",
+    "start:prod": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
     "@nextui-org/react": "^1.0.2-beta.4",

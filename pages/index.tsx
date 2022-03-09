@@ -4,7 +4,7 @@ import { Button, Text } from '@nextui-org/react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { Row, Spacer } from '@nextui-org/react'
-import { ThemeSwitcher } from './components/ThemeSwitcher'
+import { ThemeSwitcher } from '../components/ThemeSwitcher'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -15,7 +15,9 @@ const Home: NextPage = () => {
         <title>Planning Poker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ThemeSwitcher />
+      <div style={{ padding: 20 }}>
+        <ThemeSwitcher />
+      </div>
       <div
         style={{
           display: 'flex',
@@ -27,34 +29,31 @@ const Home: NextPage = () => {
           <Text h2 b style={{ textAlign: 'center' }}>
             Create room
           </Text>
-          <Spacer x={2} />
+          <Spacer y={4} />
           <Row justify="center" align="center">
             <Button
               size="xl"
               rounded
-              ghost
               onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
             >
               Story Estimation
             </Button>
           </Row>
-          <Spacer x={1} />
+          <Spacer y={1} />
           <Row justify="center" align="center">
             <Button
               size="xl"
               rounded
-              ghost
               onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
             >
               T-Shit Sizing
             </Button>
           </Row>
-          <Spacer x={1} />
+          <Spacer y={1} />
           <Row justify="center" align="center">
             <Button
               size="xl"
               rounded
-              ghost
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
             >
               Confidence Vote

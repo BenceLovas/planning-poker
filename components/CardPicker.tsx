@@ -1,9 +1,10 @@
-import { roomTypeToCardModel, CardValue } from '../model/room-card'
+import roomTypeToCardModel from '../model/room-card'
 import React, { FunctionComponent } from 'react'
 import { Socket } from 'socket.io-client'
 import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import CardValue from '../model/CardValue'
 
 type CardPickerProps = {
   roomType: string
@@ -78,7 +79,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
       }
     }
 
-    return roomModel.values.map((value) => {
+    return roomModel.values.map((value: CardValue) => {
       return (
         <Card
           key={value.id}

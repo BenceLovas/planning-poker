@@ -1,6 +1,6 @@
-import { CardValue } from './room-card'
+import CardValue from './CardValue'
 
-export interface User {
+export default interface User {
   name: string
   id: string
   hasPickedCard: boolean

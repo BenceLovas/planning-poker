@@ -5,6 +5,11 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 const lightTheme = createTheme({
   type: 'light',
+  theme: {
+    colors: {
+      background: '#f9f9f9',
+    },
+  },
 })
 
 const darkTheme = createTheme({

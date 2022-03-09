@@ -8,7 +8,7 @@ type NameInputModalProps = {
   setUserNameInput: (name: string) => void
 }
 
-export const NameInputModal: FunctionComponent<NameInputModalProps> = ({
+const NameInputModal: FunctionComponent<NameInputModalProps> = ({
   openModalForNameInput,
   closeModal,
   userNameInput,
@@ -51,3 +51,5 @@ export const NameInputModal: FunctionComponent<NameInputModalProps> = ({
     </Modal>
   )
 }
+
+export default NameInputModal

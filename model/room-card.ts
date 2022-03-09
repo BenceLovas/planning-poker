@@ -1,18 +1,6 @@
-interface RoomTypeToCardModel {
-  [key: string]: CardModel
-}
+import RoomTypeToCardModel from './RoomTypeToCardModel'
 
-interface CardModel {
-  values: CardValue[]
-}
-
-export interface CardValue {
-  label: string
-  value: number
-  id: string
-}
-
-export const roomTypeToCardModel: RoomTypeToCardModel = {
+const roomTypeToCardModel: RoomTypeToCardModel = {
   story: {
     values: [
       {
@@ -141,3 +129,5 @@ export const roomTypeToCardModel: RoomTypeToCardModel = {
     ],
   },
 }
+
+export default roomTypeToCardModel
