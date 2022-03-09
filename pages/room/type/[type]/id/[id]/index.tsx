@@ -26,7 +26,7 @@ const Room: NextPage = () => {
   const [userNameInput, setUserNameInput] = useState('')
   const [userId, setUserId] = useState('')
   const socket = useSocket(
-    'http://localhost:3000',
+    location.origin.replace(/^http/, 'ws'),
     router.query.id as string,
     userName,
     userId
