@@ -58,6 +58,8 @@ const Room: NextPage = () => {
       })
       socket.on('room_user_list_update', (payload) => {
         setUsersInRoom(payload)
+        const user = payload.find((user: User) => user.id === userId)
+        setSelectedValueId(user && user.pickedValue && user.pickedValue.id)
         console.log(payload)
       })
       socket.on('card-reveal', (payload) => {
@@ -75,8 +77,12 @@ const Room: NextPage = () => {
         setCardPickerHidden(true)
         setControlButtonState('count-down')
       })
+
+      socket.on('user_disconnected', (userId) => {
+        setUsersInRoom(usersInRoom.filter((user) => user.id !== userId))
+      })
     }
-  }, [socket])
+  }, [socket, userId, usersInRoom])
 
   useEffect(() => {
     if (userName) {
@@ -158,10 +164,13 @@ const Room: NextPage = () => {
             backfaceVisibility: 'hidden',
             transition: 'transform ease 500ms',
             zIndex: 2,
-            transform: user.pickedValue ? 'rotateY(0deg)' : 'rotateY(180deg)',
+            transform:
+              controlButtonState === 'reset'
+                ? 'rotateY(0deg)'
+                : 'rotateY(180deg)',
           }}
         >
-          {user.pickedValue && (
+          {controlButtonState === 'reset' && user.pickedValue && (
             <Text h3 color="white">
               {user.pickedValue.label}
             </Text>
@@ -186,7 +195,10 @@ const Room: NextPage = () => {
             padding: '20px 10px',
             backfaceVisibility: 'hidden',
             transition: 'transform ease 500ms',
-            transform: user.pickedValue ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            transform:
+              controlButtonState === 'reset'
+                ? 'rotateY(180deg)'
+                : 'rotateY(0deg)',
           }}
         ></div>
         <Text h5 style={{ textAlign: 'center', wordBreak: 'break-word' }}>
