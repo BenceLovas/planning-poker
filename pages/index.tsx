@@ -36,6 +36,7 @@ const Home: NextPage = () => {
               rounded
               onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
               flat
+              ripple={false}
               css={{
                 background: '$accents2',
                 color: '$text',
@@ -50,6 +51,7 @@ const Home: NextPage = () => {
               size="xl"
               rounded
               onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
+              ripple={false}
               css={{
                 background: '$accents2',
                 color: '$text',
@@ -64,6 +66,7 @@ const Home: NextPage = () => {
               size="xl"
               rounded
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
+              ripple={false}
               css={{
                 background: '$accents2',
                 color: '$text',
