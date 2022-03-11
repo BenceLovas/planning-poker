@@ -1,10 +1,10 @@
-import roomTypeToCardModel from '../model/room-card'
+import roomTypeToCardModel from '../types/room-card'
 import React, { FunctionComponent } from 'react'
 import { Socket } from 'socket.io-client'
 import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import CardValue from '../model/CardValue'
+import CardValue from '../types/CardValue'
 
 type CardPickerProps = {
   roomType: string

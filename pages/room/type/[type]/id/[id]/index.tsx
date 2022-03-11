@@ -9,8 +9,10 @@ import { ThemeSwitcher } from '../../../../../../components/ThemeSwitcher'
 import { IoPerson } from 'react-icons/io5'
 import NameInputModal from '../../../../../../components/NameInputModal'
 import { useSocket } from '../../../../../../hooks/useSocket'
-import User from '../../../../../../model/user'
+import User from '../../../../../../types/user'
 import { motion } from 'framer-motion'
+import { GameState } from '../../../../../../types/GameState'
+import { TableCard } from '../../../../../../components/TableCard'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
@@ -19,7 +21,6 @@ export async function getServerSideProps() {
   }
 }
 
-type GameState = 'count-down' | 'reveal' | 'pick'
 type SocketData = {
   user: User
   game: {
@@ -29,15 +30,16 @@ type SocketData = {
 
 const Room: NextPage = () => {
   const router = useRouter()
-  const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
+  const { theme } = useTheme()
+
   const [userName, setUserName] = useState('')
   const [userNameInput, setUserNameInput] = useState('')
   const [userId, setUserId] = useState('')
   const socket = useSocket(router.query.id as string, userName, userId)
 
+  const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
   const [usersInRoom, setUsersInRoom] = useState<SocketData[]>([])
   const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
-  const { theme } = useTheme()
   const [gameState, setGameState] = useState<GameState>('pick')
 
   useEffect(() => {
@@ -138,83 +140,11 @@ const Room: NextPage = () => {
         )
 
       case 'count-down': {
-        return <Text h3>3.. 2.. 1..</Text>
+        return <Text h5>3.. 2.. 1..</Text>
       }
       default:
         return null
     }
-  }
-
-  const renderTableUser = (user: User) => {
-    return (
-      <div
-        key={user.id}
-        style={{
-          maxWidth: 80,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <div
-          style={{
-            border: `3px solid ${
-              user.hasPickedCard
-                ? theme?.colors.primaryDark.value
-                : theme?.colors.accents2.value
-            }`,
-            background: user.hasPickedCard
-              ? theme?.colors.primary.value
-              : 'transparent',
-            borderRadius: 10,
-            width: 60,
-            height: 84,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px 10px',
-            position: 'absolute',
-            backfaceVisibility: 'hidden',
-            transition: 'transform ease 500ms',
-            zIndex: 2,
-            transform:
-              gameState === 'reveal' ? 'rotateY(0deg)' : 'rotateY(180deg)',
-          }}
-        >
-          {gameState === 'reveal' && user.pickedValue && (
-            <Text h3 color="white">
-              {user.pickedValue.label}
-            </Text>
-          )}
-        </div>
-        <div
-          style={{
-            border: `3px solid ${
-              user.hasPickedCard
-                ? theme?.colors.primaryDark.value
-                : theme?.colors.accents2.value
-            }`,
-            background: user.hasPickedCard
-              ? theme?.colors.primary.value
-              : 'transparent',
-            borderRadius: 10,
-            width: 60,
-            height: 84,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px 10px',
-            backfaceVisibility: 'hidden',
-            transition: 'transform ease 500ms',
-            transform:
-              gameState === 'reveal' ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          }}
-        ></div>
-        <Text h5 style={{ textAlign: 'center', wordBreak: 'break-word' }}>
-          {user.name}
-        </Text>
-      </div>
-    )
   }
 
   return (
@@ -257,7 +187,7 @@ const Room: NextPage = () => {
             gridArea: 'table',
             display: 'grid',
             gridTemplateRows: '1fr 1fr 1fr',
-            gap: 12,
+            gap: 16,
           }}
         >
           <div
@@ -269,7 +199,9 @@ const Room: NextPage = () => {
             }}
           >
             {usersInRoom.map((user, index) =>
-              index % 2 !== 0 ? renderTableUser(user.user) : null
+              index % 2 !== 0 ? (
+                <TableCard user={user.user} gameState={gameState} />
+              ) : null
             )}
           </div>
           <div
@@ -302,7 +234,9 @@ const Room: NextPage = () => {
             }}
           >
             {usersInRoom.map((user, index) =>
-              index % 2 === 0 ? renderTableUser(user.user) : null
+              index % 2 === 0 ? (
+                <TableCard user={user.user} gameState={gameState} />
+              ) : null
             )}
           </div>
         </div>
