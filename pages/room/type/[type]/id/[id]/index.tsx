@@ -25,12 +25,7 @@ const Room: NextPage = () => {
   const [userName, setUserName] = useState('')
   const [userNameInput, setUserNameInput] = useState('')
   const [userId, setUserId] = useState('')
-  const socket = useSocket(
-    router.basePath.replace(/^http/, 'ws'),
-    router.query.id as string,
-    userName,
-    userId
-  )
+  const socket = useSocket(router.query.id as string, userName, userId)
 
   const [usersInRoom, setUsersInRoom] = useState<User[]>([])
   const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
@@ -124,7 +119,7 @@ const Room: NextPage = () => {
         )
 
       case 'count-down': {
-        return <div style={{ fontSize: 50 }}>🥁</div>
+        return <Text h3>3.. 2.. 1..</Text>
       }
       default:
         return null
