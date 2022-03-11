@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         <title>Planning Poker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div style={{ padding: 20 }}>
+      <div style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
         <ThemeSwitcher />
       </div>
       <div
@@ -35,6 +35,11 @@ const Home: NextPage = () => {
               size="xl"
               rounded
               onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
+              flat
+              css={{
+                background: '$accents2',
+                color: '$text',
+              }}
             >
               Story estimation
             </Button>
@@ -45,6 +50,10 @@ const Home: NextPage = () => {
               size="xl"
               rounded
               onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
+              css={{
+                background: '$accents2',
+                color: '$text',
+              }}
             >
               T-shit sizing
             </Button>
@@ -55,6 +64,10 @@ const Home: NextPage = () => {
               size="xl"
               rounded
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
+              css={{
+                background: '$accents2',
+                color: '$text',
+              }}
             >
               Confidence vote
             </Button>

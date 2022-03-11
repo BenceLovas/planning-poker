@@ -187,22 +187,25 @@ const Room: NextPage = () => {
               <IoCaretBack />
               <Text h5>Home</Text>
             </div>
-            <ThemeSwitcher />
           </div>
-          <div style={{ display: 'flex', gap: 16 }}>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
             <Tooltip
               trigger="click"
               content={'Share the URL with your teammates'}
               placement={'bottom'}
             >
-              <Button auto rounded>
+              <Button auto rounded size="sm">
                 Invite players
               </Button>
             </Tooltip>
-            <Text h3>{userName}</Text>
+            <Text h4>{userName}</Text>
             <Avatar
-              icon={<IoPerson size={20} color={theme?.colors.primary.value} />}
+              icon={<IoPerson size={16} color={theme?.colors.primary.value} />}
+              size="sm"
             />
+            <div>
+              <ThemeSwitcher />
+            </div>
           </div>
         </div>
         <div
