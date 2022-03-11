@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from '../../../../../../components/CardPicker'
 import { ThemeSwitcher } from '../../../../../../components/ThemeSwitcher'
-import { IoPerson } from 'react-icons/io5'
+import { IoPerson, IoCaretBack } from 'react-icons/io5'
 import NameInputModal from '../../../../../../components/NameInputModal'
 import { useSocket } from '../../../../../../hooks/useSocket'
 import User from '../../../../../../types/user'
@@ -174,7 +174,22 @@ const Room: NextPage = () => {
             padding: 20,
           }}
         >
-          <ThemeSwitcher />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                cursor: 'pointer',
+              }}
+              onClick={() => router.push('/')}
+            >
+              <IoCaretBack />
+              <Text h5>Home</Text>
+            </div>
+            <ThemeSwitcher />
+          </div>
+
           <div style={{ display: 'flex', gap: 16 }}>
             <Text h3>{userName}</Text>
             <Avatar
