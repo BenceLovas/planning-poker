@@ -57,11 +57,6 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
 
     const onClick = (socket: Socket | undefined, value: CardValue) => {
       if (value.id !== selectedValueId) {
-        if (selectedValueId === null) {
-          if (socket) {
-            socket.emit('user_has_picked_card')
-          }
-        }
         if (socket) {
           socket.emit('value_update', {
             value,
@@ -70,7 +65,6 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
         setSelectedValueId(value.id)
       } else {
         if (socket) {
-          socket.emit('user_has_not_picked_card')
           socket.emit('value_update', {
             value: null,
           })

@@ -19,6 +19,14 @@ export async function getServerSideProps() {
   }
 }
 
+type GameState = 'count-down' | 'reveal' | 'pick'
+type SocketData = {
+  user: User
+  game: {
+    state: GameState
+  }
+}
+
 const Room: NextPage = () => {
   const router = useRouter()
   const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
@@ -27,11 +35,10 @@ const Room: NextPage = () => {
   const [userId, setUserId] = useState('')
   const socket = useSocket(router.query.id as string, userName, userId)
 
-  const [usersInRoom, setUsersInRoom] = useState<User[]>([])
+  const [usersInRoom, setUsersInRoom] = useState<SocketData[]>([])
   const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
   const { theme } = useTheme()
-  const [isCardPickerHidden, setCardPickerHidden] = useState(false)
-  const [controlButtonState, setControlButtonState] = useState('reveal')
+  const [gameState, setGameState] = useState<GameState>('pick')
 
   useEffect(() => {
     const userNameFromLocalStorage = localStorage.getItem('userName')
@@ -53,33 +60,44 @@ const Room: NextPage = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('value_update', (payload) => {
+      socket.on('room_user_list_update', (payload: SocketData[]) => {
+        setUsersInRoom(payload)
+        const socketData = payload.find(
+          (data: SocketData) => data.user.id === userId
+        )
+        setSelectedValueId(
+          (socketData &&
+            socketData.user &&
+            socketData.user.pickedValue &&
+            socketData.user.pickedValue.id) ||
+            null
+        )
+        console.log('room update - setting game state ', payload[0].game.state)
+        setGameState(payload[0].game.state)
         console.log(payload)
       })
-      socket.on('room_user_list_update', (payload) => {
+      socket.on('card-reveal', (payload: SocketData[]) => {
         setUsersInRoom(payload)
-        const user = payload.find((user: User) => user.id === userId)
-        setSelectedValueId(user && user.pickedValue && user.pickedValue.id)
-        console.log(payload)
+        setGameState(payload[0].game.state)
+        console.log('card reveal - setting game state ', payload[0].game.state)
       })
-      socket.on('card-reveal', (payload) => {
-        setUsersInRoom(payload)
-        setControlButtonState('reset')
-      })
-      socket.on('card_reset', (payload) => {
+      socket.on('card_reset', (payload: SocketData[]) => {
         setUsersInRoom(payload)
         setSelectedValueId(null)
-        setCardPickerHidden(false)
-        setControlButtonState('reveal')
+        setGameState(payload[0].game.state)
+        console.log('card reset - setting game state ', payload[0].game.state)
       })
 
       socket.on('initiate-reveal-countdown', () => {
-        setCardPickerHidden(true)
-        setControlButtonState('count-down')
+        setGameState('count-down')
       })
 
       socket.on('user_disconnected', (userId) => {
-        setUsersInRoom(usersInRoom.filter((user) => user.id !== userId))
+        setUsersInRoom(usersInRoom.filter((user) => user.user.id !== userId))
+      })
+
+      socket.on('value_update', (value) => {
+        setSelectedValueId(value.id)
       })
     }
   }, [socket, userId, usersInRoom])
@@ -99,25 +117,20 @@ const Room: NextPage = () => {
   }
 
   const renderControlButton = () => {
-    if (controlButtonState === 'hidden') {
-      return null
-    }
-    switch (controlButtonState) {
-      case 'hidden':
-        return null
-      case 'reveal':
+    switch (gameState) {
+      case 'pick':
         return (
           <Button
             rounded
             onClick={() => {
               socket?.emit('initiate-reveal-countdown')
             }}
-            disabled={!usersInRoom.some((user) => user.hasPickedCard)}
+            disabled={!usersInRoom.some((user) => user.user.hasPickedCard)}
           >
             Reveal Cards
           </Button>
         )
-      case 'reset':
+      case 'reveal':
         return (
           <Button rounded onClick={() => socket?.emit('card-reset')}>
             New Game
@@ -165,12 +178,10 @@ const Room: NextPage = () => {
             transition: 'transform ease 500ms',
             zIndex: 2,
             transform:
-              controlButtonState === 'reset'
-                ? 'rotateY(0deg)'
-                : 'rotateY(180deg)',
+              gameState === 'reveal' ? 'rotateY(0deg)' : 'rotateY(180deg)',
           }}
         >
-          {controlButtonState === 'reset' && user.pickedValue && (
+          {gameState === 'reveal' && user.pickedValue && (
             <Text h3 color="white">
               {user.pickedValue.label}
             </Text>
@@ -196,9 +207,7 @@ const Room: NextPage = () => {
             backfaceVisibility: 'hidden',
             transition: 'transform ease 500ms',
             transform:
-              controlButtonState === 'reset'
-                ? 'rotateY(180deg)'
-                : 'rotateY(0deg)',
+              gameState === 'reveal' ? 'rotateY(180deg)' : 'rotateY(0deg)',
           }}
         ></div>
         <Text h5 style={{ textAlign: 'center', wordBreak: 'break-word' }}>
@@ -260,7 +269,7 @@ const Room: NextPage = () => {
             }}
           >
             {usersInRoom.map((user, index) =>
-              index % 2 !== 0 ? renderTableUser(user) : null
+              index % 2 !== 0 ? renderTableUser(user.user) : null
             )}
           </div>
           <div
@@ -293,7 +302,7 @@ const Room: NextPage = () => {
             }}
           >
             {usersInRoom.map((user, index) =>
-              index % 2 === 0 ? renderTableUser(user) : null
+              index % 2 === 0 ? renderTableUser(user.user) : null
             )}
           </div>
         </div>
@@ -307,7 +316,8 @@ const Room: NextPage = () => {
           }}
         >
           <motion.div
-            animate={{ y: isCardPickerHidden ? 150 : 0 }}
+            initial={{ y: 150 }}
+            animate={{ y: gameState === 'pick' ? 0 : 150 }}
             transition={{
               duration: 0.4,
             }}
