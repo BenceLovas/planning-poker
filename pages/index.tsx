@@ -36,7 +36,7 @@ const Home: NextPage = () => {
               rounded
               onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
             >
-              Story Estimation
+              Story estimation
             </Button>
           </Row>
           <Spacer y={1} />
@@ -46,7 +46,7 @@ const Home: NextPage = () => {
               rounded
               onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
             >
-              T-Shit Sizing
+              T-shit sizing
             </Button>
           </Row>
           <Spacer y={1} />
@@ -56,7 +56,7 @@ const Home: NextPage = () => {
               rounded
               onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
             >
-              Confidence Vote
+              Confidence vote
             </Button>
           </Row>
         </div>

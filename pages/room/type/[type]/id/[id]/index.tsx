@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Text, Button, useTheme, Avatar } from '@nextui-org/react'
+import { Text, Button, useTheme, Avatar, Tooltip } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from '../../../../../../components/CardPicker'
@@ -129,13 +129,13 @@ const Room: NextPage = () => {
             }}
             disabled={!usersInRoom.some((user) => user.user.hasPickedCard)}
           >
-            Reveal Cards
+            Reveal cards
           </Button>
         )
       case 'reveal':
         return (
           <Button rounded onClick={() => socket?.emit('card-reset')}>
-            New Game
+            New game
           </Button>
         )
 
@@ -189,8 +189,16 @@ const Room: NextPage = () => {
             </div>
             <ThemeSwitcher />
           </div>
-
           <div style={{ display: 'flex', gap: 16 }}>
+            <Tooltip
+              trigger="click"
+              content={'Share the URL with your teammates'}
+              placement={'bottom'}
+            >
+              <Button auto rounded>
+                Invite players
+              </Button>
+            </Tooltip>
             <Text h3>{userName}</Text>
             <Avatar
               icon={<IoPerson size={20} color={theme?.colors.primary.value} />}
