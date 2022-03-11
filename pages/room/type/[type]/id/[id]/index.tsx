@@ -74,20 +74,16 @@ const Room: NextPage = () => {
             socketData.user.pickedValue.id) ||
             null
         )
-        console.log('room update - setting game state ', payload[0].game.state)
         setGameState(payload[0].game.state)
-        console.log(payload)
       })
       socket.on('card-reveal', (payload: SocketData[]) => {
         setUsersInRoom(payload)
         setGameState(payload[0].game.state)
-        console.log('card reveal - setting game state ', payload[0].game.state)
       })
       socket.on('card_reset', (payload: SocketData[]) => {
         setUsersInRoom(payload)
         setSelectedValueId(null)
         setGameState(payload[0].game.state)
-        console.log('card reset - setting game state ', payload[0].game.state)
       })
 
       socket.on('initiate-reveal-countdown', () => {
