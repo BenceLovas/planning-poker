@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Text, Button, useTheme, Avatar, Tooltip } from '@nextui-org/react'
+import { Text, Button, useTheme, Tooltip, Loading } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from '../../../../../../components/CardPicker'
 import { ThemeSwitcher } from '../../../../../../components/ThemeSwitcher'
-import { IoPerson, IoCaretBack } from 'react-icons/io5'
+import { IoCaretBack } from 'react-icons/io5'
 import NameInputModal from '../../../../../../components/NameInputModal'
 import { useSocket } from '../../../../../../hooks/useSocket'
 import User from '../../../../../../types/user'
@@ -30,7 +30,7 @@ type SocketData = {
 
 const Room: NextPage = () => {
   const router = useRouter()
-  const { theme } = useTheme()
+  const { theme, isDark } = useTheme()
 
   const [userName, setUserName] = useState('')
   const [userNameInput, setUserNameInput] = useState('')
@@ -157,7 +157,7 @@ const Room: NextPage = () => {
           background: theme?.colors.background.value,
           height: '100%',
           display: 'grid',
-          gridTemplateRows: '100px 1fr 200px',
+          gridTemplateRows: '70px 1fr 200px',
           gridTemplateAreas: `
           'header'
           'table'
@@ -170,8 +170,8 @@ const Room: NextPage = () => {
             gridArea: 'header',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            padding: 20,
+            alignItems: 'center',
+            padding: 10,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
@@ -189,27 +189,51 @@ const Room: NextPage = () => {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-            <Tooltip
-              trigger="click"
-              content={'Share the URL with your teammates'}
-              placement={'bottom'}
-            >
-              <Button auto rounded size="sm">
-                Invite players
-              </Button>
-            </Tooltip>
-            <Text h4>{userName}</Text>
-            <Avatar
-              icon={<IoPerson size={16} color={theme?.colors.primary.value} />}
-              size="sm"
-              onClick={() => {
-                setUserNameInput(userName)
-                setOpenModalForNameInput(true)
-              }}
+            <div>
+              <Tooltip
+                trigger="click"
+                content={'Share the URL with your teammates'}
+                placement={'bottom'}
+              >
+                <Button auto rounded size="sm">
+                  Invite players
+                </Button>
+              </Tooltip>
+            </div>
+            <div
               style={{
-                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '4px 20px',
+                borderLeft: `3px solid ${theme?.colors.accents2.value}`,
+                borderRight: `3px solid ${theme?.colors.accents2.value}`,
               }}
-            />
+            >
+              <Text h4>{userName}</Text>
+              <Button
+                auto
+                rounded
+                bordered
+                size="xs"
+                style={{ width: 60 }}
+                onClick={() => {
+                  setUserNameInput(userName)
+                  setOpenModalForNameInput(true)
+                }}
+              >
+                {openModalForNameInput ? (
+                  <Loading
+                    type="points-opacity"
+                    color={isDark ? 'white' : 'primary'}
+                    size="sm"
+                  />
+                ) : (
+                  'Edit'
+                )}
+              </Button>
+            </div>
+
             <div>
               <ThemeSwitcher />
             </div>
@@ -233,7 +257,12 @@ const Room: NextPage = () => {
           >
             {usersInRoom.map((user, index) =>
               index % 2 !== 0 ? (
-                <TableCard user={user.user} gameState={gameState} />
+                <TableCard
+                  user={user.user}
+                  gameState={gameState}
+                  nameOnTop={true}
+                  key={user.user.id}
+                />
               ) : null
             )}
           </div>
@@ -268,7 +297,12 @@ const Room: NextPage = () => {
           >
             {usersInRoom.map((user, index) =>
               index % 2 === 0 ? (
-                <TableCard user={user.user} gameState={gameState} />
+                <TableCard
+                  user={user.user}
+                  gameState={gameState}
+                  nameOnTop={false}
+                  key={user.user.id}
+                />
               ) : null
             )}
           </div>

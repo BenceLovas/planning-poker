@@ -10,7 +10,7 @@ export const ThemeSwitcher: FunctionComponent = ({}) => {
   return (
     <Switch
       checked={isDark}
-      size="md"
+      size="sm"
       iconOn={<IoMoon />}
       iconOff={<IoSunny />}
       onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}

@@ -4,11 +4,6 @@ import styled from 'styled-components'
 import User from '../types/user'
 import { GameState } from '../types/GameState'
 
-type TableCardProps = {
-  user: User
-  gameState: GameState
-}
-
 type CardProps = {
   theme: Theme
   isFilled: boolean
@@ -53,34 +48,50 @@ const CardContainer = styled.div`
   align-items: center;
   gap: 6px;
 `
+type TableCardProps = {
+  user: User
+  gameState: GameState
+  nameOnTop: boolean
+}
 
 export const TableCard: FunctionComponent<TableCardProps> = ({
   user,
   gameState,
+  nameOnTop,
 }) => {
   const { theme } = useTheme()
 
   return (
     <CardContainer key={user.id}>
-      <CardFace
-        gameState={gameState}
-        isFilled={user.hasPickedCard}
-        theme={theme}
-      >
-        {gameState === 'reveal' && user.pickedValue && (
-          <Text h3 color="white">
-            {user.pickedValue.label}
-          </Text>
-        )}
-      </CardFace>
-      <CardBack
-        gameState={gameState}
-        isFilled={user.hasPickedCard}
-        theme={theme}
-      ></CardBack>
-      <Text h5 style={{ textAlign: 'center', wordBreak: 'break-word' }}>
-        {user.name}
-      </Text>
+      {nameOnTop && (
+        <Text h5 style={{ textAlign: 'center', wordBreak: 'break-word' }}>
+          {user.name}
+        </Text>
+      )}
+      <div>
+        <CardFace
+          gameState={gameState}
+          isFilled={user.hasPickedCard}
+          theme={theme}
+        >
+          {gameState === 'reveal' && user.pickedValue && (
+            <Text h3 color="white">
+              {user.pickedValue.label}
+            </Text>
+          )}
+        </CardFace>
+        <CardBack
+          gameState={gameState}
+          isFilled={user.hasPickedCard}
+          theme={theme}
+        ></CardBack>
+      </div>
+
+      {!nameOnTop && (
+        <Text h5 style={{ textAlign: 'center', wordBreak: 'break-word' }}>
+          {user.name}
+        </Text>
+      )}
     </CardContainer>
   )
 }
