@@ -13,6 +13,7 @@ import User from '../../../../../../types/user'
 import { motion } from 'framer-motion'
 import { GameState } from '../../../../../../types/GameState'
 import { TableCard } from '../../../../../../components/TableCard'
+import { Countdown } from '../../../../../../components/Countdown'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
@@ -140,7 +141,7 @@ const Room: NextPage = () => {
         )
 
       case 'count-down': {
-        return <Text h5>3.. 2.. 1..</Text>
+        return <Countdown />
       }
       default:
         return null
