@@ -47,11 +47,11 @@ const CardBack = styled(Card)<CardProps>`
 `
 
 const CardContainer = styled.div`
-  max-width: 80;
+  max-width: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6;
+  gap: 6px;
 `
 
 export const TableCard: FunctionComponent<TableCardProps> = ({

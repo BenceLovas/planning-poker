@@ -47,7 +47,11 @@ const Room: NextPage = () => {
     if (userNameFromLocalStorage === null) {
       setOpenModalForNameInput(true)
     } else {
-      setUserName(userNameFromLocalStorage)
+      if (userNameFromLocalStorage.trim().length < 3) {
+        setOpenModalForNameInput(true)
+      } else {
+        setUserName(userNameFromLocalStorage.trim().substring(0, 20))
+      }
     }
 
     const userIdFromLocalStorage = localStorage.getItem('userId')
@@ -108,8 +112,8 @@ const Room: NextPage = () => {
 
   const closeModal = () => {
     if (userNameInput !== null) {
-      localStorage.setItem('userName', userNameInput)
-      setUserName(userNameInput)
+      localStorage.setItem('userName', userNameInput.trim())
+      setUserName(userNameInput.trim())
       setOpenModalForNameInput(false)
     }
   }
@@ -198,6 +202,13 @@ const Room: NextPage = () => {
             <Avatar
               icon={<IoPerson size={16} color={theme?.colors.primary.value} />}
               size="sm"
+              onClick={() => {
+                setUserNameInput(userName)
+                setOpenModalForNameInput(true)
+              }}
+              style={{
+                cursor: 'pointer',
+              }}
             />
             <div>
               <ThemeSwitcher />
@@ -264,8 +275,8 @@ const Room: NextPage = () => {
         </div>
         <div
           style={{
-            overflowX: 'scroll',
             gridArea: 'cards',
+            overflowX: 'scroll',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'flex-end',
@@ -276,6 +287,9 @@ const Room: NextPage = () => {
             animate={{ y: gameState === 'pick' ? 0 : 150 }}
             transition={{
               duration: 0.4,
+            }}
+            style={{
+              overflowX: 'scroll',
             }}
           >
             <CardPicker
