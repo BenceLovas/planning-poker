@@ -5,4 +5,5 @@ export default interface User {
   id: string
   hasPickedCard: boolean
   pickedValue: CardValue | null
+  suit: 'clubs' | 'diamonds' | 'hearts' | 'spades'
 }

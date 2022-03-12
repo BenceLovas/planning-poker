@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       </Head>
       <div
         style={{
-          padding: '17px 20px',
+          padding: '23px 20px',
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Text h2 b style={{ textAlign: 'center' }}>
+          <Text h2 b style={{ textAlign: 'center', letterSpacing: '0.03rem' }}>
             Create room
           </Text>
           <Spacer y={4} />

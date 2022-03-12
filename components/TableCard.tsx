@@ -3,6 +3,12 @@ import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import User from '../types/user'
 import { GameState } from '../types/GameState'
+import {
+  BsSuitClubFill,
+  BsSuitDiamondFill,
+  BsSuitHeartFill,
+  BsSuitSpadeFill,
+} from 'react-icons/bs'
 
 type CardProps = {
   theme: Theme
@@ -54,6 +60,13 @@ type TableCardProps = {
   nameOnTop: boolean
 }
 
+const suitToIcon = {
+  clubs: <BsSuitClubFill key={1} size={22} color={'white'} />,
+  diamonds: <BsSuitDiamondFill key={2} size={22} color={'white'} />,
+  hearts: <BsSuitHeartFill key={3} size={20} color={'white'} />,
+  spades: <BsSuitSpadeFill key={4} size={22} color={'white'} />,
+}
+
 export const TableCard: FunctionComponent<TableCardProps> = ({
   user,
   gameState,
@@ -84,7 +97,9 @@ export const TableCard: FunctionComponent<TableCardProps> = ({
           gameState={gameState}
           isFilled={user.hasPickedCard}
           theme={theme}
-        ></CardBack>
+        >
+          {user.hasPickedCard && suitToIcon[user.suit]}
+        </CardBack>
       </div>
 
       {!nameOnTop && (
