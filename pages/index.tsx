@@ -15,7 +15,14 @@ const Home: NextPage = () => {
         <title>Planning Poker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
+      <div
+        style={{
+          padding: '17px 20px',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
         <ThemeSwitcher />
       </div>
       <div

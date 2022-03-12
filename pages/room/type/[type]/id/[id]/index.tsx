@@ -171,7 +171,7 @@ const Room: NextPage = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: 10,
+            padding: 20,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
