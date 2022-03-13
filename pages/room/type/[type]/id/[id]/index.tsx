@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { GameState } from '../../../../../../types/GameState'
 import { TableCard } from '../../../../../../components/TableCard'
 import { Countdown } from '../../../../../../components/Countdown'
-import User from '../../../../../../types/User-temp'
+import User from '../../../../../../types/User'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {

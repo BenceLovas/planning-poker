@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import { GameState } from '../types/GameState'
-import User from '../types/User-temp'
+import User from '../types/User'
 import {
   BsSuitClubFill,
   BsSuitDiamondFill,
