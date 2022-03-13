@@ -64,7 +64,7 @@ const Home: NextPage = () => {
                 color: '$text',
               }}
             >
-              T-shit sizing
+              T-shirt sizing
             </Button>
           </Row>
           <Spacer y={1} />

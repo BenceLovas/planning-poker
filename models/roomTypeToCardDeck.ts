@@ -1,12 +1,17 @@
-import RoomTypeToCardModel from './RoomTypeToCardModel'
+import RoomTypeToCardDeck from '../types/RoomTypeToCardDeck'
 
-const roomTypeToCardModel: RoomTypeToCardModel = {
+const roomTypeToCardDeck: RoomTypeToCardDeck = {
   story: {
     values: [
       {
         label: '0',
         value: 0,
         id: '1',
+      },
+      {
+        label: '½',
+        value: 0.5,
+        id: '12',
       },
       {
         label: '1',
@@ -130,4 +135,4 @@ const roomTypeToCardModel: RoomTypeToCardModel = {
   },
 }
 
-export default roomTypeToCardModel
+export default roomTypeToCardDeck

@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
-import User from '../types/user'
 import { GameState } from '../types/GameState'
 import {
   BsSuitClubFill,
@@ -9,11 +8,20 @@ import {
   BsSuitHeartFill,
   BsSuitSpadeFill,
 } from 'react-icons/bs'
+import CardValue from '../types/CardValue'
 
 type CardProps = {
   theme: Theme
   isFilled: boolean
   gameState: GameState
+}
+
+interface User {
+  name: string
+  id: string
+  hasPickedCard: boolean
+  pickedValue: CardValue | null
+  suit: 'clubs' | 'diamonds' | 'hearts' | 'spades'
 }
 
 const Card = styled.div<CardProps>`

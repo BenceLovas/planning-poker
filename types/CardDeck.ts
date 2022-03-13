@@ -1,5 +1,5 @@
 import CardValue from './CardValue'
 
-export default interface CardModel {
+export default interface CardDeck {
   values: CardValue[]
 }

@@ -9,17 +9,25 @@ import { ThemeSwitcher } from '../../../../../../components/ThemeSwitcher'
 import { IoCaretBack } from 'react-icons/io5'
 import NameInputModal from '../../../../../../components/NameInputModal'
 import { useSocket } from '../../../../../../hooks/useSocket'
-import User from '../../../../../../types/user'
 import { motion } from 'framer-motion'
 import { GameState } from '../../../../../../types/GameState'
 import { TableCard } from '../../../../../../components/TableCard'
 import { Countdown } from '../../../../../../components/Countdown'
+import CardValue from '../../../../../../types/CardValue'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
   return {
     props: {},
   }
+}
+
+interface User {
+  name: string
+  id: string
+  hasPickedCard: boolean
+  pickedValue: CardValue | null
+  suit: 'clubs' | 'diamonds' | 'hearts' | 'spades'
 }
 
 type SocketData = {
@@ -186,7 +194,7 @@ const Room: NextPage = () => {
               onClick={() => router.push('/')}
             >
               <IoCaretBack />
-              <Text h5>Home</Text>
+              <Text h5>Create room</Text>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
@@ -311,7 +319,7 @@ const Room: NextPage = () => {
         <div
           style={{
             gridArea: 'cards',
-            overflowX: 'scroll',
+            overflowY: 'hidden',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'flex-end',
@@ -322,9 +330,6 @@ const Room: NextPage = () => {
             animate={{ y: gameState === 'pick' ? 0 : 150 }}
             transition={{
               duration: 0.4,
-            }}
-            style={{
-              overflowX: 'scroll',
             }}
           >
             <CardPicker
