@@ -9,25 +9,17 @@ import { ThemeSwitcher } from '../../../../../../components/ThemeSwitcher'
 import { IoCaretBack } from 'react-icons/io5'
 import NameInputModal from '../../../../../../components/NameInputModal'
 import { useSocket } from '../../../../../../hooks/useSocket'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { GameState } from '../../../../../../types/GameState'
 import { TableCard } from '../../../../../../components/TableCard'
 import { Countdown } from '../../../../../../components/Countdown'
-import CardValue from '../../../../../../types/CardValue'
+import User from '../../../../../../types/User'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
   return {
     props: {},
   }
-}
-
-interface User {
-  name: string
-  id: string
-  hasPickedCard: boolean
-  pickedValue: CardValue | null
-  suit: 'clubs' | 'diamonds' | 'hearts' | 'spades'
 }
 
 type SocketData = {
@@ -325,20 +317,27 @@ const Room: NextPage = () => {
             alignItems: 'flex-end',
           }}
         >
-          <motion.div
-            initial={{ y: 150 }}
-            animate={{ y: gameState === 'pick' ? 0 : 150 }}
-            transition={{
-              duration: 0.4,
-            }}
-          >
-            <CardPicker
-              roomType={router.query.type as string}
-              socket={socket}
-              selectedValueId={selectedValueId}
-              setSelectedValueId={setSelectedValueId}
-            />
-          </motion.div>
+          <AnimatePresence>
+            {gameState === 'pick' && (
+              <motion.div
+                initial={{ y: 150 }}
+                animate={{ y: 0 }}
+                transition={{
+                  duration: 0.4,
+                }}
+                exit={{
+                  y: 150,
+                }}
+              >
+                <CardPicker
+                  roomType={router.query.type as string}
+                  socket={socket}
+                  selectedValueId={selectedValueId}
+                  setSelectedValueId={setSelectedValueId}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
       <NameInputModal

@@ -2,13 +2,13 @@ import React, { FunctionComponent } from 'react'
 import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import { GameState } from '../types/GameState'
+import User from '../types/User'
 import {
   BsSuitClubFill,
   BsSuitDiamondFill,
   BsSuitHeartFill,
   BsSuitSpadeFill,
 } from 'react-icons/bs'
-import CardValue from '../types/CardValue'
 
 type CardProps = {
   theme: Theme
@@ -16,23 +16,7 @@ type CardProps = {
   gameState: GameState
 }
 
-interface User {
-  name: string
-  id: string
-  hasPickedCard: boolean
-  pickedValue: CardValue | null
-  suit: 'clubs' | 'diamonds' | 'hearts' | 'spades'
-}
-
 const Card = styled.div<CardProps>`
-  border: ${(props) =>
-    `3px solid ${
-      props.isFilled
-        ? props.theme.colors.primaryDark.value
-        : props.theme.colors.accents2.value
-    }`};
-  background: ${(props) =>
-    props.isFilled ? props.theme.colors.primary.value : 'transparent'};
   border-radius: 10px;
   width: 60px;
   height: 84px;
@@ -45,12 +29,22 @@ const Card = styled.div<CardProps>`
 `
 
 const CardFace = styled(Card)<CardProps>`
+  background: transparent;
+  border: ${(props) => `3px solid ${props.theme.colors.accents2.value}`};
   position: absolute;
   z-index: 2;
   transform: ${(props) =>
     props.gameState === 'reveal' ? 'rotateY(0deg)' : 'rotateY(180deg)'};
 `
 const CardBack = styled(Card)<CardProps>`
+  background: ${(props) =>
+    props.isFilled ? props.theme.colors.primary.value : 'transparent'};
+  border: ${(props) =>
+    `3px solid ${
+      props.isFilled
+        ? props.theme.colors.primaryDark.value
+        : props.theme.colors.accents2.value
+    }`};
   transform: ${(props) =>
     props.gameState === 'reveal' ? 'rotateY(180deg)' : 'rotateY(0deg)'};
 `
@@ -96,9 +90,7 @@ export const TableCard: FunctionComponent<TableCardProps> = ({
           theme={theme}
         >
           {gameState === 'reveal' && user.pickedValue && (
-            <Text h3 color="white">
-              {user.pickedValue.label}
-            </Text>
+            <Text h3>{user.pickedValue.label}</Text>
           )}
         </CardFace>
         <CardBack
