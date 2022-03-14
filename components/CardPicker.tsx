@@ -92,7 +92,9 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
             color={
               value.id === selectedValueId ? 'white' : theme?.colors.text.value
             }
-            style={{ userSelect: 'none' }}
+            css={{
+              userSelect: 'none',
+            }}
           >
             {value.label}
           </Text>
