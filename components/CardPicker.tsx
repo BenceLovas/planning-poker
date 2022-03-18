@@ -104,7 +104,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
   }
 
   return (
-    <div style={{ overflowX: 'scroll', padding: '44px 40px 36px 40px' }}>
+    <div style={{ padding: '44px 40px 36px 40px' }}>
       <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
     </div>
   )

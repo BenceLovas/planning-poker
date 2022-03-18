@@ -148,6 +148,21 @@ const Room: NextPage = () => {
     }
   }
 
+  const getAverage = () => {
+    const usersWithValuablePicks = usersInRoom.filter(
+      (user) => user.user.pickedValue && user.user.pickedValue.value !== null
+    )
+    return usersWithValuablePicks.length !== 0
+      ? usersWithValuablePicks.reduce(
+          (acc, user) =>
+            user.user.pickedValue && user.user.pickedValue.value !== null
+              ? acc + user.user.pickedValue.value
+              : acc,
+          0
+        ) / usersWithValuablePicks.length
+      : 0
+  }
+
   return (
     <>
       <Head>
@@ -317,6 +332,21 @@ const Room: NextPage = () => {
             alignItems: 'flex-end',
           }}
         >
+          {gameState === 'reveal' && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                padding: 50,
+              }}
+            >
+              <Text h4 weight={'light'}>
+                Average
+              </Text>
+              <Text h2>{getAverage()}</Text>
+            </div>
+          )}
           <AnimatePresence>
             {gameState === 'pick' && (
               <motion.div

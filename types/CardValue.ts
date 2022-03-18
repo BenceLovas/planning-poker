@@ -1,5 +1,5 @@
 export default interface CardValue {
   label: string
-  value: number
+  value: number | null
   id: string
 }

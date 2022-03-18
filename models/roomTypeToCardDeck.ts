@@ -60,7 +60,7 @@ const roomTypeToCardDeck: RoomTypeToCardDeck = {
       },
       {
         label: '?',
-        value: 0,
+        value: null,
         id: '11',
       },
     ],
