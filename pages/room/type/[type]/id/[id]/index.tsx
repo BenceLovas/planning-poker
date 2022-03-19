@@ -14,6 +14,7 @@ import { GameState } from '../../../../../../types/GameState'
 import { TableCard } from '../../../../../../components/TableCard'
 import { Countdown } from '../../../../../../components/Countdown'
 import User from '../../../../../../types/User'
+import roomTypeToCardDeck from '../../../../../../models/roomTypeToCardDeck'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
@@ -152,15 +153,27 @@ const Room: NextPage = () => {
     const usersWithValuablePicks = usersInRoom.filter(
       (user) => user.user.pickedValue && user.user.pickedValue.value !== null
     )
-    return usersWithValuablePicks.length !== 0
-      ? usersWithValuablePicks.reduce(
-          (acc, user) =>
-            user.user.pickedValue && user.user.pickedValue.value !== null
-              ? acc + user.user.pickedValue.value
-              : acc,
-          0
-        ) / usersWithValuablePicks.length
-      : 0
+    const average =
+      usersWithValuablePicks.length !== 0
+        ? usersWithValuablePicks.reduce(
+            (acc, user) =>
+              user.user.pickedValue && user.user.pickedValue.value !== null
+                ? acc + user.user.pickedValue.value
+                : acc,
+            0
+          ) / usersWithValuablePicks.length
+        : 0
+
+    if (router.query.type === 't-shirt') {
+      const roundedAverage = Math.round(average)
+      const tShirtCard = roomTypeToCardDeck[router.query.type].values.find(
+        (card) => card.value === roundedAverage
+      )
+      // currently tShirtCard should be alaways found but added N/A for fallback just in case
+      return tShirtCard ? tShirtCard.label : 'N/A'
+    } else {
+      return average
+    }
   }
 
   return (
