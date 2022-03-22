@@ -172,7 +172,7 @@ const Room: NextPage = () => {
       // currently tShirtCard should be alaways found but added N/A for fallback just in case
       return tShirtCard ? tShirtCard.label : 'N/A'
     } else {
-      return average
+      return usersWithValuablePicks.length !== 0 ? average : 'N/A'
     }
   }
 
