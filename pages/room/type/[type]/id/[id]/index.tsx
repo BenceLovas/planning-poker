@@ -40,7 +40,7 @@ const Room: NextPage = () => {
   const socket = useSocket(router.query.id as string, userName, userId)
 
   const [openModalForNameInput, setOpenModalForNameInput] = useState(false)
-  const [usersInRoom, setUsersInRoom] = useState<SocketData[]>([])
+  const [socketsData, setSocketsData] = useState<SocketData[]>([])
   const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
   const [gameState, setGameState] = useState<GameState>('pick')
 
@@ -69,7 +69,7 @@ const Room: NextPage = () => {
   useEffect(() => {
     if (socket) {
       socket.on('room_user_list_update', (payload: SocketData[]) => {
-        setUsersInRoom(payload)
+        setSocketsData(payload)
         const socketData = payload.find(
           (data: SocketData) => data.user.id === userId
         )
@@ -83,11 +83,11 @@ const Room: NextPage = () => {
         setGameState(payload[0].game.state)
       })
       socket.on('card-reveal', (payload: SocketData[]) => {
-        setUsersInRoom(payload)
+        setSocketsData(payload)
         setGameState(payload[0].game.state)
       })
       socket.on('card_reset', (payload: SocketData[]) => {
-        setUsersInRoom(payload)
+        setSocketsData(payload)
         setSelectedValueId(null)
         setGameState(payload[0].game.state)
       })
@@ -97,14 +97,16 @@ const Room: NextPage = () => {
       })
 
       socket.on('user_disconnected', (userId) => {
-        setUsersInRoom(usersInRoom.filter((user) => user.user.id !== userId))
+        setSocketsData(
+          socketsData.filter((socketData) => socketData.user.id !== userId)
+        )
       })
 
       socket.on('value_update', (value) => {
         setSelectedValueId(value.id)
       })
     }
-  }, [socket, userId, usersInRoom])
+  }, [socket, userId, socketsData])
 
   useEffect(() => {
     if (userName) {
@@ -129,7 +131,9 @@ const Room: NextPage = () => {
             onClick={() => {
               socket?.emit('initiate-reveal-countdown')
             }}
-            disabled={!usersInRoom.some((user) => user.user.hasPickedCard)}
+            disabled={
+              !socketsData.some((socketData) => socketData.user.hasPickedCard)
+            }
           >
             Reveal cards
           </Button>
@@ -150,18 +154,21 @@ const Room: NextPage = () => {
   }
 
   const getAverage = () => {
-    const usersWithValuablePicks = usersInRoom.filter(
-      (user) => user.user.pickedValue && user.user.pickedValue.value !== null
+    const socketsWithValuablePicks = socketsData.filter(
+      (socketData) =>
+        socketData.user.pickedValue &&
+        socketData.user.pickedValue.value !== null
     )
     const average =
-      usersWithValuablePicks.length !== 0
-        ? usersWithValuablePicks.reduce(
-            (acc, user) =>
-              user.user.pickedValue && user.user.pickedValue.value !== null
-                ? acc + user.user.pickedValue.value
+      socketsWithValuablePicks.length !== 0
+        ? socketsWithValuablePicks.reduce(
+            (acc, socketData) =>
+              socketData.user.pickedValue &&
+              socketData.user.pickedValue.value !== null
+                ? acc + socketData.user.pickedValue.value
                 : acc,
             0
-          ) / usersWithValuablePicks.length
+          ) / socketsWithValuablePicks.length
         : 0
 
     if (router.query.type === 't-shirt') {
@@ -172,7 +179,7 @@ const Room: NextPage = () => {
       // currently tShirtCard should be alaways found but added N/A for fallback just in case
       return tShirtCard ? tShirtCard.label : 'N/A'
     } else {
-      return usersWithValuablePicks.length !== 0 ? average : 'N/A'
+      return socketsWithValuablePicks.length !== 0 ? average : 'N/A'
     }
   }
 
@@ -284,13 +291,13 @@ const Room: NextPage = () => {
               alignItems: 'flex-end',
             }}
           >
-            {usersInRoom.map((user, index) =>
+            {socketsData.map((socketData, index) =>
               index % 2 !== 0 ? (
                 <TableCard
-                  user={user.user}
+                  user={socketData.user}
                   gameState={gameState}
                   nameOnTop={true}
-                  key={user.user.id}
+                  key={socketData.user.id}
                 />
               ) : null
             )}
@@ -324,13 +331,13 @@ const Room: NextPage = () => {
               alignItems: 'flex-start',
             }}
           >
-            {usersInRoom.map((user, index) =>
+            {socketsData.map((socketData, index) =>
               index % 2 === 0 ? (
                 <TableCard
-                  user={user.user}
+                  user={socketData.user}
                   gameState={gameState}
                   nameOnTop={false}
-                  key={user.user.id}
+                  key={socketData.user.id}
                 />
               ) : null
             )}
