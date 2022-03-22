@@ -1,6 +1,6 @@
 {
   "name": "planning-poker",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,37 +9,38 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextui-org/react": "^1.0.2-beta.4",
-    "express": "^4.17.3",
-    "framer-motion": "^6.2.8",
+    "@nextui-org/react": "1.0.3-beta.5",
+    "express": "4.17.3",
+    "framer-motion": "6.2.8",
     "next": "12.1.0",
     "next-themes": "^0.1.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-icons": "^4.3.1",
-    "react-is": "^17.0.2y",
-    "socket.io": "^4.4.1",
-    "socket.io-client": "^4.4.1",
-    "styled-components": "^5.3.3",
-    "uuid": "^8.3.2"
+    "react-icons": "4.3.1",
+    "react-is": "17.0.2",
+    "socket.io": "4.4.1",
+    "socket.io-client": "4.4.1",
+    "styled-components": "5.3.3",
+    "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/lodash": "^4.14.180",
-    "@types/node": "17.0.21",
-    "@types/react": "17.0.40",
-    "@types/styled-components": "^5.1.24",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.15.0",
-    "@typescript-eslint/parser": "^5.15.0",
+    "@types/express": "4.17.13",
+    "@types/lodash": "4.14.180",
+    "@types/node": "17.0.22",
+    "@types/react": "17.0.41",
+    "@types/styled-components": "5.1.24",
+    "@types/uuid": "8.3.4",
+    "@typescript-eslint/eslint-plugin": "5.16.0",
+    "@typescript-eslint/parser": "5.16.0",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
-    "eslint-config-prettier": "^8.5.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.3.7",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.6.0",
-    "ts-node": "^10.6.0",
+    "eslint-config-prettier": "8.5.0",
+    "husky": "7.0.4",
+    "lint-staged": "12.3.7",
+    "prettier": "2.6.0",
     "typescript": "4.6.2"
+  },
+  "resolutions": {
+    "minimist": "1.2.6"
   }
 }
