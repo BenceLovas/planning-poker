@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { Row, Spacer } from '@nextui-org/react'
 import { ThemeSwitcher } from '../components/ThemeSwitcher'
+import { menuItems } from '../models/menuItems'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -37,51 +38,28 @@ const Home: NextPage = () => {
             Create room
           </Text>
           <Spacer y={4} />
-          <Row justify="center" align="center">
-            <Button
-              size="xl"
-              rounded
-              onClick={() => router.push(`/room/type/story/id/${uuid()}`)}
-              flat
-              ripple={false}
-              css={{
-                background: '$accents2',
-                color: '$text',
-              }}
-            >
-              Story estimation
-            </Button>
-          </Row>
-          <Spacer y={1} />
-          <Row justify="center" align="center">
-            <Button
-              size="xl"
-              rounded
-              onClick={() => router.push(`/room/type/t-shirt/id/${uuid()}`)}
-              ripple={false}
-              css={{
-                background: '$accents2',
-                color: '$text',
-              }}
-            >
-              T-shirt sizing
-            </Button>
-          </Row>
-          <Spacer y={1} />
-          <Row justify="center" align="center">
-            <Button
-              size="xl"
-              rounded
-              onClick={() => router.push(`/room/type/confidence/id/${uuid()}`)}
-              ripple={false}
-              css={{
-                background: '$accents2',
-                color: '$text',
-              }}
-            >
-              Confidence vote
-            </Button>
-          </Row>
+          {menuItems.map((menuItem) => (
+            <>
+              <Row justify="center" align="center">
+                <Button
+                  size="xl"
+                  rounded
+                  onClick={() =>
+                    router.push(`/room/type/${menuItem.roomType}/id/${uuid()}`)
+                  }
+                  flat
+                  ripple={false}
+                  css={{
+                    background: '$accents2',
+                    color: '$text',
+                  }}
+                >
+                  {menuItem.buttonText}
+                </Button>
+              </Row>
+              <Spacer y={1} />
+            </>
+          ))}
         </div>
       </div>
     </>

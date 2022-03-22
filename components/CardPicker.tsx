@@ -5,9 +5,10 @@ import { Text, useTheme, Theme } from '@nextui-org/react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import CardValue from '../types/CardValue'
+import { RoomType } from '../types/RoomType'
 
 type CardPickerProps = {
-  roomType: string
+  roomType: RoomType
   socket: Socket | undefined
   selectedValueId: string | null
   setSelectedValueId: (id: string | null) => void

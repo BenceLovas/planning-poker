@@ -15,6 +15,7 @@ import { TableCard } from '../../../../../../components/TableCard'
 import { Countdown } from '../../../../../../components/Countdown'
 import User from '../../../../../../types/User'
 import roomTypeToCardDeck from '../../../../../../models/roomTypeToCardDeck'
+import { RoomType } from '../../../../../../types/RoomType'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
@@ -380,7 +381,7 @@ const Room: NextPage = () => {
                 }}
               >
                 <CardPicker
-                  roomType={router.query.type as string}
+                  roomType={router.query.type as RoomType}
                   socket={socket}
                   selectedValueId={selectedValueId}
                   setSelectedValueId={setSelectedValueId}

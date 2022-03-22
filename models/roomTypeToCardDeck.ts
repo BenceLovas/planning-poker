@@ -1,6 +1,7 @@
-import RoomTypeToCardDeck from '../types/RoomTypeToCardDeck'
+import { RoomType } from '../types/RoomType'
+import CardDeck from '../types/CardDeck'
 
-const roomTypeToCardDeck: RoomTypeToCardDeck = {
+const roomTypeToCardDeck: Record<RoomType, CardDeck> = {
   story: {
     values: [
       {
