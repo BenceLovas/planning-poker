@@ -21,7 +21,12 @@ const NameInputModal: FunctionComponent<NameInputModalProps> = ({
       onClose={closeModal}
       preventClose
     >
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          closeModal()
+        }}
+      >
         <Modal.Header>
           <Text id="modal-title" size={18}>
             Choose your display name
