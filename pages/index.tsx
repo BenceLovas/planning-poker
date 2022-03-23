@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { Row, Spacer } from '@nextui-org/react'
 import { ThemeSwitcher } from '../components/ThemeSwitcher'
 import { menuItems } from '../models/menuItems'
+import { Fragment } from 'react'
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -39,7 +40,7 @@ const Home: NextPage = () => {
           </Text>
           <Spacer y={4} />
           {menuItems.map((menuItem) => (
-            <>
+            <Fragment key={menuItem.id}>
               <Row justify="center" align="center">
                 <Button
                   size="xl"
@@ -58,7 +59,7 @@ const Home: NextPage = () => {
                 </Button>
               </Row>
               <Spacer y={1} />
-            </>
+            </Fragment>
           ))}
         </div>
       </div>
