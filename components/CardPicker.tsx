@@ -20,6 +20,7 @@ type CardProps = {
 }
 
 const Card = styled.div<CardProps>`
+  flex: 0 0 auto;
   border: ${(props) =>
     `3px solid ${
       props.selected
@@ -105,8 +106,10 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
   }
 
   return (
-    <div style={{ padding: '44px 40px 36px 40px' }}>
-      <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
+    <div style={{ padding: '0px 40px 0px 40px', maxWidth: '100vw' }}>
+      <div style={{ padding: '44px 0px 36px 0px', overflowX: 'auto' }}>
+        <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
+      </div>
     </div>
   )
 }
