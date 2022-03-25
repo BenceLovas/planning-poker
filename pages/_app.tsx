@@ -2,6 +2,8 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { NextUIProvider, createTheme } from '@nextui-org/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { useEffect } from 'react'
+import ReactGA from 'react-ga'
 
 const lightTheme = createTheme({
   type: 'light',
@@ -29,6 +31,16 @@ const darkTheme = createTheme({
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    if (
+      process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS &&
+      process.env.NODE_ENV === 'production'
+    ) {
+      // Checks for GA ID and only turns on GA in production
+      ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS)
+      ReactGA.pageview(window.location.pathname + window.location.search)
+    }
+  })
   return (
     <NextThemesProvider
       defaultTheme="system"
