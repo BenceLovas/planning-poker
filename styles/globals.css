@@ -20,5 +20,12 @@ a {
 }
 
 #__next {
-  height: 100vh;
+  height: 100%;
+}
+
+/* fixes 100vh on iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  body {
+    height: -webkit-fill-available;
+  }
 }

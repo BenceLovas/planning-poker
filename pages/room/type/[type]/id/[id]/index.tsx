@@ -214,7 +214,7 @@ const Room: NextPage = () => {
             transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
             style={{
               background: theme?.colors.background.value,
-              height: '100vh',
+              height: '100%',
               width: '100%',
               position: 'absolute',
               zIndex: 888,
