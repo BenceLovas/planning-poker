@@ -166,7 +166,7 @@ const Room: NextPage = () => {
     }
   }
 
-  const getAverage = () => {
+  const getAverage = (): string => {
     const socketsWithValuablePicks = socketsData.filter(
       (socketData) =>
         socketData.user.pickedValue &&
@@ -192,7 +192,10 @@ const Room: NextPage = () => {
       // currently tShirtCard should be alaways found but added N/A for fallback just in case
       return tShirtCard ? tShirtCard.label : 'N/A'
     } else {
-      return socketsWithValuablePicks.length !== 0 ? average : 'N/A'
+      // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
+      return socketsWithValuablePicks.length !== 0
+        ? String(Math.round((average + Number.EPSILON) * 100) / 100)
+        : 'N/A'
     }
   }
 
