@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/hooks": "^4.1.0",
-    "@mantine/next": "^4.1.0",
-    "@nextui-org/react": "1.0.5-beta.5",
+    "@mantine/hooks": "^4.1.1",
+    "@mantine/next": "^4.1.1",
+    "@nextui-org/react": "1.0.6-beta.5",
     "express": "4.17.3",
     "framer-motion": "6.2.8",
     "next": "12.1.4",

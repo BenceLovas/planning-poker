@@ -15,5 +15,5 @@ export const Countdown: FunctionComponent = () => {
     return () => clearTimeout(intervalId)
   })
 
-  return <Text h4>{counter}</Text>
+  return <Text h3>{counter}</Text>
 }
