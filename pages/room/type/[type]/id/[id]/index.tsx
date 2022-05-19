@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState, useMemo } from 'react'
-import { Text, Button, useTheme, Tooltip, Loading } from '@nextui-org/react'
+import { Text, Button, useTheme, Loading, Popover } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from '../../../../../../components/CardPicker'
@@ -249,15 +249,26 @@ const Room: NextPage = () => {
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Tooltip
-                  trigger="click"
-                  content={'Share the URL with your teammates'}
-                  placement={'bottom'}
-                >
-                  <Button auto rounded size="md">
-                    Invite players
-                  </Button>
-                </Tooltip>
+                <Popover disableAnimation>
+                  <Popover.Trigger>
+                    <Button
+                      auto
+                      rounded
+                      size="md"
+                      onClick={() => {
+                        navigator.clipboard.writeText(window.location.href)
+                      }}
+                    >
+                      Invite players
+                    </Button>
+                  </Popover.Trigger>
+                  <Popover.Content>
+                    <div style={{ padding: 16 }}>
+                      <div>URL copied!</div>
+                      <div>Share the URL with your teammates</div>
+                    </div>
+                  </Popover.Content>
+                </Popover>
               </div>
               <div
                 style={{
@@ -303,7 +314,7 @@ const Room: NextPage = () => {
       <div
         style={{
           background: theme?.colors.background.value,
-          height: '100%',
+          height: '100vh',
           display: 'grid',
           gridTemplateRows: '70px minmax(0, 1fr) 200px',
           gridTemplateColumns: '100vw',
@@ -349,15 +360,26 @@ const Room: NextPage = () => {
           ) : (
             <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
               <div>
-                <Tooltip
-                  trigger="click"
-                  content={'Share the URL with your teammates'}
-                  placement={'bottom'}
-                >
-                  <Button auto rounded size="sm">
-                    Invite players
-                  </Button>
-                </Tooltip>
+                <Popover disableAnimation>
+                  <Popover.Trigger>
+                    <Button
+                      auto
+                      rounded
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(window.location.href)
+                      }}
+                    >
+                      Invite players
+                    </Button>
+                  </Popover.Trigger>
+                  <Popover.Content>
+                    <div style={{ padding: 16 }}>
+                      <div>URL copied!</div>
+                      <div>Share the URL with your teammates</div>
+                    </div>
+                  </Popover.Content>
+                </Popover>
               </div>
               <div
                 style={{

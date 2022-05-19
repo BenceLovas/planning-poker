@@ -42,7 +42,7 @@ const CardBack = styled(Card)<CardProps>`
   border: ${(props) =>
     `3px solid ${
       props.isFilled
-        ? props.theme.colors.primaryDark.value
+        ? props.theme.colors.primarySolidHover.value
         : props.theme.colors.accents2.value
     }`};
   transform: ${(props) =>

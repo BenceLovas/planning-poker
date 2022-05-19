@@ -11,7 +11,7 @@
   "dependencies": {
     "@mantine/hooks": "^4.2.5",
     "@mantine/next": "^4.2.5",
-    "@nextui-org/react": "1.0.6-beta.5",
+    "@nextui-org/react": "1.0.0-beta.7",
     "express": "4.18.1",
     "framer-motion": "6.3.3",
     "next": "12.1.6",
