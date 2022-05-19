@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Text, Button, useTheme, Tooltip, Loading } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { v4 as uuid } from 'uuid'
@@ -166,7 +166,7 @@ const Room: NextPage = () => {
     }
   }
 
-  const getAverage = (): string => {
+  const average = useMemo((): string => {
     const socketsWithValuablePicks = socketsData.filter(
       (socketData) =>
         socketData.user.pickedValue &&
@@ -197,7 +197,7 @@ const Room: NextPage = () => {
         ? String(Math.round((average + Number.EPSILON) * 100) / 100)
         : 'N/A'
     }
-  }
+  }, [gameState])
 
   return (
     <>
@@ -489,7 +489,7 @@ const Room: NextPage = () => {
               <Text h4 weight={'light'}>
                 Average
               </Text>
-              <Text h2>{getAverage()}</Text>
+              <Text h2>{average}</Text>
             </div>
           )}
           <AnimatePresence>
