@@ -332,7 +332,7 @@ const Room: NextPage = () => {
                 borderRadius: 100,
                 height: '100%',
                 width: '40%',
-                background: theme?.colors.accents2.value,
+                background: theme?.colors.accents3.value,
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
