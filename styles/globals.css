@@ -10,22 +10,10 @@ body {
   height: 100vh;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 * {
   box-sizing: border-box;
 }
 
 #__next {
   height: 100%;
-}
-
-/* fixes 100vh on iOS Safari */
-@supports (-webkit-touch-callout: none) {
-  body {
-    height: -webkit-fill-available;
-  }
 }

@@ -10,6 +10,7 @@ export const Countdown: FunctionComponent = () => {
     }
     const intervalId = setTimeout(() => {
       setCounter(counter - 1)
+      // this should be a one second (1000ms) countdown but making the timer faster makes UX better
     }, 680)
 
     return () => clearTimeout(intervalId)

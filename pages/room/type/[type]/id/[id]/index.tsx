@@ -16,7 +16,6 @@ import { Countdown } from '../../../../../../components/Countdown'
 import User from '../../../../../../types/User'
 import roomTypeToCardDeck from '../../../../../../models/roomTypeToCardDeck'
 import { RoomType } from '../../../../../../types/RoomType'
-import { useMediaQuery } from '@mantine/hooks'
 
 // this is needed to keep the router query up to date on page refresh
 export async function getServerSideProps() {
@@ -35,8 +34,6 @@ type SocketData = {
 const Room: NextPage = () => {
   const router = useRouter()
   const { theme, isDark } = useTheme()
-  const isMobileView = useMediaQuery('(max-width: 576px)')
-  const [isSettingsDrawerOpen, setSettingsDrawerOpen] = useState(false)
 
   const [userName, setUserName] = useState('')
   const [userNameInput, setUserNameInput] = useState('')
@@ -47,10 +44,6 @@ const Room: NextPage = () => {
   const [socketsData, setSocketsData] = useState<SocketData[]>([])
   const [selectedValueId, setSelectedValueId] = useState<string | null>(null)
   const [gameState, setGameState] = useState<GameState>('pick')
-
-  // useEffect(() => {
-
-  // }, [isMobileView])
 
   useEffect(() => {
     const userNameFromLocalStorage = localStorage.getItem('userName')
@@ -142,18 +135,13 @@ const Room: NextPage = () => {
             disabled={
               !socketsData.some((socketData) => socketData.user.hasPickedCard)
             }
-            auto={isMobileView}
           >
             Reveal cards
           </Button>
         )
       case 'reveal':
         return (
-          <Button
-            rounded
-            onClick={() => socket?.emit('card-reset')}
-            auto={isMobileView}
-          >
+          <Button rounded onClick={() => socket?.emit('card-reset')}>
             New game
           </Button>
         )
@@ -204,113 +192,6 @@ const Room: NextPage = () => {
       <Head>
         <title>Planning Poker - Room</title>
       </Head>
-      <AnimatePresence>
-        {isSettingsDrawerOpen && (
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{
-              x: 0,
-            }}
-            exit={{
-              x: '100%',
-            }}
-            transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-            style={{
-              background: theme?.colors.background.value,
-              height: '100%',
-              width: '100%',
-              position: 'absolute',
-              zIndex: 888,
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                padding: 20,
-              }}
-            >
-              <Button
-                auto
-                rounded
-                bordered
-                onClick={() => setSettingsDrawerOpen(false)}
-              >
-                <Text h6>Close settings</Text>
-              </Button>
-            </div>
-            <div
-              style={{
-                padding: 20,
-                display: 'grid',
-                gap: 40,
-                justifyContent: 'center',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Popover disableAnimation>
-                  <Popover.Trigger>
-                    <Button
-                      auto
-                      rounded
-                      size="md"
-                      onClick={() => {
-                        navigator.clipboard.writeText(window.location.href)
-                      }}
-                    >
-                      Invite players
-                    </Button>
-                  </Popover.Trigger>
-                  <Popover.Content>
-                    <div style={{ padding: 16 }}>
-                      <div>URL copied!</div>
-                      <div>Share the URL with your teammates</div>
-                    </div>
-                  </Popover.Content>
-                </Popover>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                }}
-              >
-                <Text h4>{userName}</Text>
-                <Button
-                  auto
-                  rounded
-                  bordered
-                  size="xs"
-                  style={{ width: 60 }}
-                  onClick={() => {
-                    setUserNameInput(userName)
-                    setOpenModalForNameInput(true)
-                  }}
-                >
-                  {openModalForNameInput ? (
-                    <Loading
-                      type="points-opacity"
-                      color={isDark ? 'white' : 'primary'}
-                      size="sm"
-                    />
-                  ) : (
-                    <Text h6 weight={'normal'}>
-                      Edit
-                    </Text>
-                  )}
-                </Button>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <ThemeSwitcher />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <div
         style={{
           background: theme?.colors.background.value,
@@ -348,86 +229,75 @@ const Room: NextPage = () => {
               <Text h5>Create room</Text>
             </div>
           </div>
-          {isMobileView ? (
-            <Button
-              auto
-              rounded
-              bordered
-              onClick={() => setSettingsDrawerOpen(true)}
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+            <div>
+              <Popover disableAnimation>
+                <Popover.Trigger>
+                  <Button
+                    auto
+                    rounded
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href)
+                    }}
+                  >
+                    Invite players
+                  </Button>
+                </Popover.Trigger>
+                <Popover.Content>
+                  <div style={{ padding: 16 }}>
+                    <div>URL copied!</div>
+                    <div>Share the URL with your teammates</div>
+                  </div>
+                </Popover.Content>
+              </Popover>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '4px 20px',
+                borderLeft: `3px solid ${theme?.colors.accents2.value}`,
+                borderRight: `3px solid ${theme?.colors.accents2.value}`,
+              }}
             >
-              <Text h6>Settings</Text>
-            </Button>
-          ) : (
-            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-              <div>
-                <Popover disableAnimation>
-                  <Popover.Trigger>
-                    <Button
-                      auto
-                      rounded
-                      size="sm"
-                      onClick={() => {
-                        navigator.clipboard.writeText(window.location.href)
-                      }}
-                    >
-                      Invite players
-                    </Button>
-                  </Popover.Trigger>
-                  <Popover.Content>
-                    <div style={{ padding: 16 }}>
-                      <div>URL copied!</div>
-                      <div>Share the URL with your teammates</div>
-                    </div>
-                  </Popover.Content>
-                </Popover>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  padding: '4px 20px',
-                  borderLeft: `3px solid ${theme?.colors.accents2.value}`,
-                  borderRight: `3px solid ${theme?.colors.accents2.value}`,
+              <Text h4>{userName}</Text>
+              <Button
+                auto
+                rounded
+                bordered
+                size="xs"
+                style={{ width: 60 }}
+                onClick={() => {
+                  setUserNameInput(userName)
+                  setOpenModalForNameInput(true)
                 }}
               >
-                <Text h4>{userName}</Text>
-                <Button
-                  auto
-                  rounded
-                  bordered
-                  size="xs"
-                  style={{ width: 60 }}
-                  onClick={() => {
-                    setUserNameInput(userName)
-                    setOpenModalForNameInput(true)
-                  }}
-                >
-                  {openModalForNameInput ? (
-                    <Loading
-                      type="points-opacity"
-                      color={isDark ? 'white' : 'primary'}
-                      size="sm"
-                    />
-                  ) : (
-                    <Text h6 weight={'normal'}>
-                      Edit
-                    </Text>
-                  )}
-                </Button>
-              </div>
-
-              <div>
-                <ThemeSwitcher />
-              </div>
+                {openModalForNameInput ? (
+                  <Loading
+                    type="points-opacity"
+                    color={isDark ? 'white' : 'primary'}
+                    size="sm"
+                  />
+                ) : (
+                  <Text h6 weight={'normal'}>
+                    Edit
+                  </Text>
+                )}
+              </Button>
             </div>
-          )}
+
+            <div>
+              <ThemeSwitcher />
+            </div>
+          </div>
         </div>
         <div
           style={{
             gridArea: 'table',
             display: 'grid',
-            gridTemplateRows: isMobileView ? '1fr 60px 1fr' : '1fr 1fr 1fr',
+            gridTemplateRows: '1fr 1fr 1fr',
             gap: 16,
           }}
         >

@@ -75,34 +75,47 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
       }
     }
 
-    return cardDeck.values.map((value: CardValue) => {
-      return (
-        <Card
-          key={value.id}
-          as={motion.div}
-          animate={{ y: value.id === selectedValueId ? -8 : 0 }}
-          whileHover={{
-            y: -8,
-            transition: { duration: 0.4, ease: 'easeOut' },
-          }}
-          onClick={() => onClick(socket, value)}
-          theme={theme}
-          selected={value.id === selectedValueId}
-        >
-          <Text
-            h3
-            color={
-              value.id === selectedValueId ? 'white' : theme?.colors.text.value
-            }
-            css={{
-              userSelect: 'none',
-            }}
-          >
-            {value.label}
-          </Text>
-        </Card>
-      )
-    })
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          padding: 20,
+        }}
+      >
+        {cardDeck.values.map((value: CardValue) => {
+          return (
+            <Card
+              key={value.id}
+              as={motion.div}
+              animate={{ y: value.id === selectedValueId ? -8 : 0 }}
+              whileHover={{
+                y: -8,
+                transition: { duration: 0.4, ease: 'easeOut' },
+              }}
+              onClick={() => onClick(socket, value)}
+              theme={theme}
+              selected={value.id === selectedValueId}
+            >
+              <Text
+                h3
+                color={
+                  value.id === selectedValueId
+                    ? 'white'
+                    : theme?.colors.text.value
+                }
+                css={{
+                  userSelect: 'none',
+                }}
+              >
+                {value.label}
+              </Text>
+            </Card>
+          )
+        })}
+      </div>
+    )
   }
 
   return (
