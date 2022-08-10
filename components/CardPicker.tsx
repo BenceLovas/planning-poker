@@ -81,7 +81,8 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-end',
-          padding: 20,
+          padding: 26,
+          gap: 8,
         }}
       >
         {cardDeck.values.map((value: CardValue) => {
@@ -121,7 +122,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
   return (
     <div style={{ padding: '0px 40px 0px 40px', maxWidth: '100vw' }}>
       <div style={{ padding: '44px 0px 36px 0px', overflowX: 'auto' }}>
-        <div style={{ display: 'flex', gap: 6 }}>{renderValueCards()}</div>
+        <div style={{ display: 'flex' }}>{renderValueCards()}</div>
       </div>
     </div>
   )

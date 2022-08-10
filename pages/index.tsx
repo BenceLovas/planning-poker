@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Button, Text } from '@nextui-org/react'
+import { Button, Text, useTheme } from '@nextui-org/react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import { Row, Spacer } from '@nextui-org/react'
@@ -10,6 +10,7 @@ import { Fragment } from 'react'
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const { theme } = useTheme()
 
   return (
     <>
@@ -51,8 +52,11 @@ const Home: NextPage = () => {
                   flat
                   ripple={false}
                   css={{
-                    background: '$accents2',
-                    color: '$text',
+                    background: theme?.colors.accents2.value,
+                    color: theme?.colors.text.value,
+                    '&:hover': {
+                      background: theme?.colors.accents4.value,
+                    },
                   }}
                 >
                   {menuItem.buttonText}
