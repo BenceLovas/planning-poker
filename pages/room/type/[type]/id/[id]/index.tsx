@@ -135,6 +135,9 @@ const Room: NextPage = () => {
             disabled={
               !socketsData.some((socketData) => socketData.user.hasPickedCard)
             }
+            bordered={
+              !socketsData.some((socketData) => socketData.user.hasPickedCard)
+            }
           >
             Reveal cards
           </Button>
@@ -213,6 +216,10 @@ const Room: NextPage = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: 20,
+            background: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
+            borderColor: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
+            borderWidth: 2,
+            borderStyle: 'solid',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
@@ -332,7 +339,10 @@ const Room: NextPage = () => {
                 borderRadius: 100,
                 height: '100%',
                 width: '40%',
-                background: theme?.colors.accents3.value,
+                background: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
+                borderColor: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
+                borderWidth: 2,
+                borderStyle: 'solid',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -375,7 +385,7 @@ const Room: NextPage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'column',
-                padding: 50,
+                padding: 26,
               }}
             >
               <Text h4 weight={'light'}>

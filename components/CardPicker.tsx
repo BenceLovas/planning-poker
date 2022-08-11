@@ -22,13 +22,15 @@ type CardProps = {
 const Card = styled.div<CardProps>`
   flex: 0 0 auto;
   border: ${(props) =>
-    `3px solid ${
+    `2px solid ${
       props.selected
         ? props.theme.colors.primarySolidHover.value
-        : props.theme.colors.accents2.value
+        : props.theme.colors.accents3.value
     }`};
   background: ${(props) =>
-    props.selected ? props.theme.colors.primary.value : 'transparent'};
+    props.selected
+      ? props.theme.colors.primary.value
+      : props.theme.colors.background.value};
   cursor: pointer;
   border-radius: 10px;
   width: 60px;

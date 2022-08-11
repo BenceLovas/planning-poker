@@ -14,6 +14,7 @@ type CardProps = {
   theme: Theme
   isFilled: boolean
   gameState: GameState
+  isDark: boolean | undefined
 }
 
 const Card = styled.div<CardProps>`
@@ -29,21 +30,30 @@ const Card = styled.div<CardProps>`
 `
 
 const CardFace = styled(Card)<CardProps>`
-  background: transparent;
-  border: ${(props) => `3px solid ${props.theme.colors.accents2.value}`};
+  background: ${(props) =>
+    props.isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)'};
+  border: ${(props) => `2px solid ${props.theme.colors.accents3.value}`};
   position: absolute;
   z-index: 2;
   transform: ${(props) =>
     props.gameState === 'reveal' ? 'rotateY(0deg)' : 'rotateY(180deg)'};
 `
 const CardBack = styled(Card)<CardProps>`
-  background: ${(props) =>
-    props.isFilled ? props.theme.colors.primary.value : 'transparent'};
+  background: ${(props) => {
+    if (props.isFilled) {
+      return props.theme.colors.primary.value
+    }
+    if (props.isDark) {
+      return 'rgba(0,0,0,.1)'
+    } else {
+      return 'rgba(0,0,0,.02)'
+    }
+  }};
   border: ${(props) =>
-    `3px solid ${
+    `2px solid ${
       props.isFilled
         ? props.theme.colors.primarySolidHover.value
-        : props.theme.colors.accents2.value
+        : props.theme.colors.accents3.value
     }`};
   transform: ${(props) =>
     props.gameState === 'reveal' ? 'rotateY(180deg)' : 'rotateY(0deg)'};
@@ -74,7 +84,7 @@ export const TableCard: FunctionComponent<TableCardProps> = ({
   gameState,
   nameOnTop,
 }) => {
-  const { theme } = useTheme()
+  const { theme, isDark } = useTheme()
 
   return (
     <CardContainer key={user.id}>
@@ -88,6 +98,7 @@ export const TableCard: FunctionComponent<TableCardProps> = ({
           gameState={gameState}
           isFilled={user.hasPickedCard}
           theme={theme}
+          isDark={isDark}
         >
           {gameState === 'reveal' && user.pickedValue && (
             <Text h3>{user.pickedValue.label}</Text>
@@ -97,6 +108,7 @@ export const TableCard: FunctionComponent<TableCardProps> = ({
           gameState={gameState}
           isFilled={user.hasPickedCard}
           theme={theme}
+          isDark={isDark}
         >
           {user.hasPickedCard && suitToIcon[user.suit]}
         </CardBack>
