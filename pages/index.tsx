@@ -1,16 +1,24 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Button, Text, useTheme } from '@nextui-org/react'
+import { Button, Text, Row, Spacer, styled } from '@nextui-org/react'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
-import { Row, Spacer } from '@nextui-org/react'
 import { ThemeSwitcher } from '../components/ThemeSwitcher'
 import { menuItems } from '../models/menuItems'
 import { Fragment } from 'react'
 
+// this is an ugly hack to overwrite the styles (could not find any better working solution)
+// the only other solution was to use the 'css' prop on the Button component which made the button flicker (original color first and suddenly changed to the custom one)
+const MenuButton = styled(Button, {
+  background: '$accents2 !important',
+  color: '$text !important',
+  '&:hover': {
+    background: '$accents4 !important',
+  },
+})
+
 const Home: NextPage = () => {
   const router = useRouter()
-  const { theme } = useTheme()
 
   return (
     <>
@@ -43,7 +51,7 @@ const Home: NextPage = () => {
           {menuItems.map((menuItem) => (
             <Fragment key={menuItem.id}>
               <Row justify="center" align="center">
-                <Button
+                <MenuButton
                   size="xl"
                   rounded
                   onClick={() =>
@@ -51,16 +59,9 @@ const Home: NextPage = () => {
                   }
                   flat
                   ripple={false}
-                  css={{
-                    background: theme?.colors.accents2.value,
-                    color: theme?.colors.text.value,
-                    '&:hover': {
-                      background: theme?.colors.accents4.value,
-                    },
-                  }}
                 >
                   {menuItem.buttonText}
-                </Button>
+                </MenuButton>
               </Row>
               <Spacer y={1} />
             </Fragment>
