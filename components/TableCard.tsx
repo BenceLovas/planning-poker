@@ -30,8 +30,7 @@ const Card = styled.div<CardProps>`
 `
 
 const CardFace = styled(Card)<CardProps>`
-  background: ${(props) =>
-    props.isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)'};
+  background: transparent;
   border: ${(props) => `2px solid ${props.theme.colors.accents3.value}`};
   position: absolute;
   z-index: 2;
@@ -39,16 +38,8 @@ const CardFace = styled(Card)<CardProps>`
     props.gameState === 'reveal' ? 'rotateY(0deg)' : 'rotateY(180deg)'};
 `
 const CardBack = styled(Card)<CardProps>`
-  background: ${(props) => {
-    if (props.isFilled) {
-      return props.theme.colors.primary.value
-    }
-    if (props.isDark) {
-      return 'rgba(0,0,0,.1)'
-    } else {
-      return 'rgba(0,0,0,.02)'
-    }
-  }};
+  background: ${(props) =>
+    props.isFilled ? props.theme.colors.primary.value : 'transparent'}};
   border: ${(props) =>
     `2px solid ${
       props.isFilled

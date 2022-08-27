@@ -216,8 +216,8 @@ const Room: NextPage = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: 20,
-            background: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
-            borderColor: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
+            background: isDark ? 'rgba(255,255,255,.035)' : 'rgba(0,0,0,.03)',
+            borderColor: isDark ? 'rgba(255,255,255,.035)' : 'rgba(0,0,0,.03)',
             borderWidth: 2,
             borderStyle: 'solid',
           }}
@@ -304,7 +304,7 @@ const Room: NextPage = () => {
           style={{
             gridArea: 'table',
             display: 'grid',
-            gridTemplateRows: '1fr 1fr 1fr',
+            gridTemplateRows: '1fr minmax(60px, 180px) 1fr',
             gap: 16,
           }}
         >
@@ -338,9 +338,15 @@ const Room: NextPage = () => {
               style={{
                 borderRadius: 100,
                 height: '100%',
-                width: '40%',
-                background: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
-                borderColor: isDark ? 'rgba(0,0,0,.1)' : 'rgba(0,0,0,.02)',
+                minWidth: 240,
+                maxWidth: 540,
+                width: '70%',
+                background: isDark
+                  ? 'rgba(255,255,255,.035)'
+                  : 'rgba(0,0,0,.03)',
+                borderColor: isDark
+                  ? 'rgba(255,255,255,.035)'
+                  : 'rgba(0,0,0,.03)',
                 borderWidth: 2,
                 borderStyle: 'solid',
                 display: 'flex',
