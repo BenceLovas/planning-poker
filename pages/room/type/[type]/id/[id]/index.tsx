@@ -274,7 +274,7 @@ const Room: NextPage = () => {
               }}
             >
               <Dropdown>
-                <Dropdown.Button light>
+                <Dropdown.Button light ripple={false}>
                   <div
                     style={{ display: 'flex', gap: 12, alignItems: 'center' }}
                   >
