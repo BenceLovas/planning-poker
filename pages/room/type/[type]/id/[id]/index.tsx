@@ -240,7 +240,7 @@ const Room: NextPage = () => {
           </div>
           <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
             <div>
-              <Popover disableAnimation>
+              <Popover>
                 <Popover.Trigger>
                   <Button
                     auto
@@ -273,7 +273,7 @@ const Room: NextPage = () => {
                 borderRight: `3px solid ${theme?.colors.accents2.value}`,
               }}
             >
-              <Dropdown disableAnimation>
+              <Dropdown>
                 <Dropdown.Button light>
                   <div
                     style={{ display: 'flex', gap: 12, alignItems: 'center' }}
