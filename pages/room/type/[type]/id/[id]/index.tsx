@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState, useMemo } from 'react'
-import { Text, Button, useTheme, Loading, Popover } from '@nextui-org/react'
+import { Text, Button, useTheme, Popover, Dropdown } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { v4 as uuid } from 'uuid'
 import { CardPicker } from '../../../../../../components/CardPicker'
@@ -129,6 +129,7 @@ const Room: NextPage = () => {
         return (
           <Button
             rounded
+            shadow
             onClick={() => {
               socket?.emit('initiate-reveal-countdown')
             }}
@@ -144,11 +145,12 @@ const Room: NextPage = () => {
         )
       case 'reveal':
         return (
-          <Button rounded onClick={() => socket?.emit('card-reset')}>
-            New game
+          <Button rounded bordered onClick={() => socket?.emit('card-reset')}>
+            <Text h6 weight={'semibold'}>
+              New game
+            </Text>
           </Button>
         )
-
       case 'count-down': {
         return <Countdown />
       }
@@ -242,13 +244,16 @@ const Room: NextPage = () => {
                 <Popover.Trigger>
                   <Button
                     auto
+                    bordered
                     rounded
                     size="sm"
                     onClick={() => {
                       navigator.clipboard.writeText(window.location.href)
                     }}
                   >
-                    Invite players
+                    <Text h6 weight={'semibold'}>
+                      Invite players
+                    </Text>
                   </Button>
                 </Popover.Trigger>
                 <Popover.Content>
@@ -264,35 +269,44 @@ const Room: NextPage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 12,
-                padding: '4px 20px',
                 borderLeft: `3px solid ${theme?.colors.accents2.value}`,
                 borderRight: `3px solid ${theme?.colors.accents2.value}`,
               }}
             >
-              <Text h4>{userName}</Text>
-              <Button
-                auto
-                rounded
-                bordered
-                size="xs"
-                style={{ width: 60 }}
-                onClick={() => {
-                  setUserNameInput(userName)
-                  setOpenModalForNameInput(true)
-                }}
-              >
-                {openModalForNameInput ? (
-                  <Loading
-                    type="points-opacity"
-                    color={isDark ? 'white' : 'primary'}
-                    size="sm"
-                  />
-                ) : (
-                  <Text h6 weight={'normal'}>
-                    Edit
-                  </Text>
-                )}
-              </Button>
+              <Dropdown disableAnimation>
+                <Dropdown.Button light>
+                  <div
+                    style={{ display: 'flex', gap: 12, alignItems: 'center' }}
+                  >
+                    <div
+                      style={{
+                        width: 30,
+                        height: 30,
+                        background: theme?.colors.primaryLight.value,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Text h5 style={{ color: theme?.colors.primary.value }}>
+                        {userName && userName[0].toUpperCase()}
+                      </Text>
+                    </div>
+                    <Text h5>{userName}</Text>
+                  </div>
+                </Dropdown.Button>
+                <Dropdown.Menu
+                  onAction={(key) => {
+                    if (key === 'edit') {
+                      setUserNameInput(userName)
+                      setOpenModalForNameInput(true)
+                    }
+                  }}
+                >
+                  <Dropdown.Item key="edit">Edit name</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
 
             <div>
@@ -391,7 +405,7 @@ const Room: NextPage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'column',
-                padding: 26,
+                padding: 48,
               }}
             >
               <Text h4 weight={'light'}>

@@ -8,7 +8,7 @@ export const ThemeSwitcher: FunctionComponent = ({}) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <Text h5 weight={isDark ? 'light' : 'bold'}>
+      <Text h6 weight={isDark ? 'light' : 'bold'}>
         Light
       </Text>
       <Switch
@@ -16,7 +16,7 @@ export const ThemeSwitcher: FunctionComponent = ({}) => {
         size="sm"
         onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
       />
-      <Text h5 weight={isDark ? 'bold' : 'light'}>
+      <Text h6 weight={isDark ? 'bold' : 'light'}>
         Dark
       </Text>
     </div>
