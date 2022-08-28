@@ -127,21 +127,33 @@ const Room: NextPage = () => {
     switch (gameState) {
       case 'pick':
         return (
-          <Button
-            rounded
-            shadow
-            onClick={() => {
-              socket?.emit('initiate-reveal-countdown')
-            }}
-            disabled={
-              !socketsData.some((socketData) => socketData.user.hasPickedCard)
-            }
-            bordered={
-              !socketsData.some((socketData) => socketData.user.hasPickedCard)
-            }
-          >
-            Reveal cards
-          </Button>
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button
+                rounded
+                shadow
+                onClick={() => {
+                  socket?.emit('initiate-reveal-countdown')
+                }}
+                disabled={
+                  !socketsData.some(
+                    (socketData) => socketData.user.hasPickedCard
+                  )
+                }
+                bordered={
+                  !socketsData.some(
+                    (socketData) => socketData.user.hasPickedCard
+                  )
+                }
+              >
+                Reveal cards
+              </Button>
+            </motion.div>
+          </AnimatePresence>
         )
       case 'reveal':
         return (
@@ -263,7 +275,7 @@ const Room: NextPage = () => {
                   </Button>
                 </Popover.Trigger>
                 <Popover.Content>
-                  <div style={{ padding: 16 }}>
+                  <div style={{ padding: 24 }}>
                     <div>URL copied!</div>
                     <div>Share the URL with your teammates</div>
                   </div>
