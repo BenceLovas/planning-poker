@@ -145,11 +145,17 @@ const Room: NextPage = () => {
         )
       case 'reveal':
         return (
-          <Button rounded bordered onClick={() => socket?.emit('card-reset')}>
-            <Text h6 weight={'semibold'}>
-              New game
-            </Text>
-          </Button>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Button rounded bordered onClick={() => socket?.emit('card-reset')}>
+              <Text h6 weight={'semibold'}>
+                New game
+              </Text>
+            </Button>
+          </motion.div>
         )
       case 'count-down': {
         return <Countdown />
@@ -252,7 +258,7 @@ const Room: NextPage = () => {
                     }}
                   >
                     <Text h6 weight={'semibold'}>
-                      Invite players
+                      Invite others
                     </Text>
                   </Button>
                 </Popover.Trigger>
