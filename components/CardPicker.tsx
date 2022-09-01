@@ -123,7 +123,7 @@ export const CardPicker: FunctionComponent<CardPickerProps> = ({
 
   return (
     <div style={{ padding: '0px 40px 0px 40px', maxWidth: '100vw' }}>
-      <div style={{ padding: '44px 0px 36px 0px', overflowX: 'auto' }}>
+      <div style={{ padding: '8px 0px 24px 0px', overflowX: 'auto' }}>
         <div style={{ display: 'flex' }}>{renderValueCards()}</div>
       </div>
     </div>

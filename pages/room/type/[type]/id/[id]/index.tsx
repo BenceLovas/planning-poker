@@ -220,7 +220,7 @@ const Room: NextPage = () => {
           background: theme?.colors.background.value,
           height: '100vh',
           display: 'grid',
-          gridTemplateRows: '70px minmax(0, 1fr) 200px',
+          gridTemplateRows: '70px minmax(0, 1fr) 180px',
           gridTemplateColumns: '100vw',
           gridTemplateAreas: `
           'header'
@@ -334,6 +334,7 @@ const Room: NextPage = () => {
         </div>
         <div
           style={{
+            margin: 30,
             gridArea: 'table',
             display: 'grid',
             gridTemplateRows: '1fr minmax(60px, 180px) 1fr',
