@@ -13,7 +13,3 @@ yarn dev
 ## Set Up Why did you render
 
 https://github.com/vercel/next.js/tree/canary/examples/with-why-did-you-render
-
-## Demo
-
-https://planning-poker-bl.herokuapp.com/
